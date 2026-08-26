@@ -1,0 +1,38 @@
+---
+import { localePath, site, type Locale } from '../lib/site';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="page-shell footer-grid">
+    <div>
+      <p class="footer-title">{site.name}</p>
+      <p>{site.role[locale]} · Madrid, ES</p>
+    </div>
+    <div class="footer-links">
+      <a href={localePath(locale, '/projects')}>{locale === 'es' ? 'Proyectos' : 'Projects'}</a>
+      <a href={site.github}>GitHub</a>
+      <a href={site.linkedin}>LinkedIn</a>
+    </div>
+    <p class="footer-meta">© {year} · Astro + GitHub Pages</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--color-line); padding-block: 2.5rem; }
+  .footer-grid { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 2rem; }
+  p { margin: 0; color: var(--color-muted); font-size: 0.72rem; }
+  .footer-title { margin-bottom: 0.4rem; color: var(--color-ink); font-weight: 700; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: var(--color-forest); font-size: 0.7rem; font-weight: 700; text-decoration: none; text-transform: uppercase; }
+  .footer-links a:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
+  .footer-meta { text-align: right; }
+  @media (max-width: 700px) {
+    .footer-grid { grid-template-columns: 1fr; align-items: start; }
+    .footer-meta { text-align: left; }
+    .footer-links { flex-wrap: wrap; }
+  }
+</style>

@@ -1,0 +1,46 @@
+---
+import BackgroundField from '../components/BackgroundField.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import '../styles/global.css';
+import { alternateLocalePath, site, type Locale } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description: string;
+}
+
+const { locale, title, description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role[locale]}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternate = new URL(alternateLocalePath(locale, Astro.url.pathname), Astro.site);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f4f0e7" />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang={locale === 'es' ? 'en' : 'es'} href={alternate} />
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">{locale === 'es' ? 'Saltar al contenido' : 'Skip to content'}</a>
+    <BackgroundField />
+    <SiteHeader locale={locale} pathname={Astro.url.pathname} />
+    <main id="main-content"><slot /></main>
+    <SiteFooter locale={locale} />
+  </body>
+</html>

@@ -1,0 +1,76 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+import { ui, type Locale } from '../lib/site';
+
+interface Props {
+  projects: CollectionEntry<'projects'>[];
+  locale: Locale;
+  filterable?: boolean;
+}
+
+const { projects, locale, filterable = false } = Astro.props;
+const tags = [...new Set(projects.flatMap((project) => project.data.tags))].sort();
+---
+
+<section data-project-filter={filterable ? '' : undefined}>
+  {filterable && (
+    <div class="filter-bar" aria-label={locale === 'es' ? 'Filtrar proyectos por etiqueta' : 'Filter projects by tag'}>
+      <span class="filter-label">{locale === 'es' ? 'Filtrar /' : 'Filter /'}</span>
+      <div class="filter-list">
+        <button class="filter-chip" type="button" data-filter="all" aria-pressed="true">{ui[locale].all}</button>
+        {tags.map((tag) => <button class="filter-chip" type="button" data-filter={tag} aria-pressed="false">{tag}</button>)}
+      </div>
+      <p class="filter-count" aria-live="polite"><span data-visible-count>{projects.length}</span> / {projects.length}</p>
+    </div>
+  )}
+  <div class="project-grid">
+    {projects.map((project, index) => <ProjectCard project={project} locale={locale} index={index} />)}
+  </div>
+</section>
+
+{filterable && (
+  <script>
+    document.querySelectorAll<HTMLElement>('[data-project-filter]').forEach((section) => {
+      const buttons = section.querySelectorAll<HTMLButtonElement>('[data-filter]');
+      const cards = section.querySelectorAll<HTMLElement>('[data-project-card]');
+      const count = section.querySelector<HTMLElement>('[data-visible-count]');
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          const selected = button.dataset.filter ?? 'all';
+          let visible = 0;
+
+          buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+          cards.forEach((card) => {
+            const tags = JSON.parse(card.dataset.tags ?? '[]') as string[];
+            const show = selected === 'all' || tags.includes(selected);
+            card.hidden = !show;
+            if (show) visible += 1;
+          });
+
+          if (count) count.textContent = String(visible);
+        });
+      });
+    });
+  </script>
+)}
+
+<style>
+  .filter-bar { display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 1.2rem; margin-bottom: 2rem; padding-block: 1.1rem; border-block: 1px solid var(--color-line); }
+  .filter-label,
+  .filter-count { margin: 0; color: var(--color-muted); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .filter-label { padding-top: 0.55rem; }
+  .filter-count { padding-top: 0.55rem; font-variant-numeric: tabular-nums; }
+  .filter-list { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .filter-chip { min-height: 2rem; padding: 0.35rem 0.7rem; border: 1px solid var(--color-line); background: transparent; color: var(--color-muted); cursor: pointer; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.045em; text-transform: uppercase; transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease; }
+  .filter-chip:hover { border-color: var(--color-forest); color: var(--color-forest); }
+  .filter-chip[aria-pressed="true"] { border-color: var(--color-forest); background: var(--color-forest); color: var(--color-paper); }
+  .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  [hidden] { display: none; }
+  @media (max-width: 780px) {
+    .project-grid { grid-template-columns: 1fr; }
+    .filter-bar { grid-template-columns: 1fr auto; }
+    .filter-label { grid-column: 1 / -1; }
+  }
+</style>

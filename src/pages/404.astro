@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localePath } from '../lib/site';
+---
+<BaseLayout locale="es" title="404" description="Página no encontrada.">
+  <section class="page-shell not-found">
+    <p class="eyebrow">ERROR / 404</p>
+    <h1 class="display-title">Coordenada no encontrada.</h1>
+    <p class="lede">La ruta solicitada está fuera del área cartografiada.</p>
+    <a class="button-primary" href={localePath('es', '/')}>Volver al inicio</a>
+  </section>
+</BaseLayout>
+<style>
+  .not-found { display: grid; min-height: 70vh; align-content: center; justify-items: start; padding-block: 5rem; }
+  .not-found h1 { margin-top: 2rem; }
+  .not-found .lede { margin: 2rem 0; }
+</style>

@@ -1,0 +1,57 @@
+<div class="background-field" data-shader-root aria-hidden="true">
+  <div class="background-field__grid"></div>
+  <div class="background-field__signal"></div>
+</div>
+
+<style>
+  .background-field {
+    position: fixed;
+    z-index: -1;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .background-field__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(21, 61, 48, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(21, 61, 48, 0.035) 1px, transparent 1px),
+      radial-gradient(circle at 82% 12%, rgba(189, 107, 67, 0.11), transparent 27rem),
+      radial-gradient(circle at 8% 72%, rgba(45, 92, 73, 0.09), transparent 31rem);
+    background-position: center;
+    background-size: 42px 42px, 42px 42px, auto, auto;
+    mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.55) 58%, transparent 100%);
+    animation: grid-drift 24s ease-in-out infinite alternate;
+  }
+
+  .background-field__signal {
+    position: absolute;
+    top: 8rem;
+    right: clamp(2rem, 8vw, 10rem);
+    width: min(36vw, 32rem);
+    aspect-ratio: 1;
+    border: 1px solid rgba(21, 61, 48, 0.08);
+    border-radius: 50%;
+  }
+
+  .background-field__signal::before,
+  .background-field__signal::after {
+    position: absolute;
+    border: 1px solid rgba(21, 61, 48, 0.06);
+    border-radius: inherit;
+    content: "";
+  }
+
+  .background-field__signal::before { inset: 14%; }
+  .background-field__signal::after { inset: 31%; }
+
+  @keyframes grid-drift {
+    to { transform: translate3d(7px, -7px, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .background-field__grid { animation: none; }
+  }
+</style>

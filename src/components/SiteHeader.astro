@@ -1,0 +1,166 @@
+---
+import { alternateLocalePath, localePath, site, stripBase, ui, type Locale } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  pathname: string;
+}
+
+const { locale, pathname } = Astro.props;
+const labels = ui[locale];
+const route = stripBase(pathname).replace(/^\/en(?=\/|$)/, '') || '/';
+const links = [
+  { href: localePath(locale, '/'), label: labels.nav.home, route: '/' },
+  { href: localePath(locale, '/projects'), label: labels.nav.projects, route: '/projects' },
+  { href: localePath(locale, '/about'), label: labels.nav.about, route: '/about' },
+  { href: localePath(locale, '/contact'), label: labels.nav.contact, route: '/contact' },
+];
+const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : route.startsWith(itemRoute);
+---
+
+<header class="site-header">
+  <div class="page-shell header-inner">
+    <a class="brand" href={localePath(locale, '/')} aria-label={`${site.name} — ${labels.nav.home}`}>
+      <span class="brand-mark" aria-hidden="true">N°</span>
+      <span>
+        <strong>{site.name}</strong>
+        <small>{site.role[locale]}</small>
+      </span>
+    </a>
+
+    <nav class="desktop-nav" aria-label={locale === 'es' ? 'Navegación principal' : 'Primary navigation'}>
+      {links.map((link) => (
+        <a href={link.href} aria-current={isActive(link.route) ? 'page' : undefined}>{link.label}</a>
+      ))}
+    </nav>
+
+    <a class="language-link" href={alternateLocalePath(locale, pathname)} hreflang={locale === 'es' ? 'en' : 'es'}>
+      {locale === 'es' ? 'EN' : 'ES'}
+      <span class="sr-only">— {labels.language}</span>
+    </a>
+
+    <details class="mobile-menu">
+      <summary aria-label={locale === 'es' ? 'Abrir menú' : 'Open menu'}>Menú</summary>
+      <nav aria-label={locale === 'es' ? 'Navegación móvil' : 'Mobile navigation'}>
+        {links.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 20;
+    border-bottom: 1px solid var(--color-line);
+    background: color-mix(in srgb, var(--color-paper) 88%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .header-inner {
+    display: grid;
+    min-height: 5.4rem;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 2.2rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    width: max-content;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 2.15rem;
+    height: 2.15rem;
+    place-items: center;
+    border: 1px solid var(--color-forest);
+    color: var(--color-forest);
+    font-family: var(--font-serif);
+    font-size: 0.82rem;
+  }
+
+  .brand strong,
+  .brand small { display: block; }
+  .brand strong { font-size: 0.8rem; letter-spacing: 0.02em; }
+  .brand small { margin-top: 0.14rem; color: var(--color-muted); font-size: 0.62rem; }
+
+  .desktop-nav { display: flex; align-items: center; gap: 2rem; }
+  .desktop-nav a,
+  .language-link {
+    position: relative;
+    color: var(--color-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .desktop-nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: -0.55rem;
+    left: 0;
+    height: 1px;
+    background: var(--color-forest);
+    content: "";
+    transform: scaleX(0);
+    transition: transform 180ms ease;
+  }
+
+  .desktop-nav a:hover,
+  .desktop-nav a[aria-current="page"],
+  .language-link:hover { color: var(--color-forest); }
+  .desktop-nav a:hover::after,
+  .desktop-nav a[aria-current="page"]::after { transform: scaleX(1); }
+
+  .language-link {
+    padding-left: 1.4rem;
+    border-left: 1px solid var(--color-line);
+  }
+
+  .mobile-menu { display: none; }
+
+  @media (max-width: 760px) {
+    .header-inner { grid-template-columns: 1fr auto auto; gap: 0.8rem; }
+    .desktop-nav { display: none; }
+    .language-link { padding-left: 0; border-left: 0; }
+    .mobile-menu { position: relative; display: block; }
+    .mobile-menu summary {
+      cursor: pointer;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      list-style: none;
+      text-transform: uppercase;
+    }
+    .mobile-menu summary::-webkit-details-marker { display: none; }
+    .mobile-menu nav {
+      position: absolute;
+      top: 2.2rem;
+      right: 0;
+      display: grid;
+      width: 13rem;
+      border: 1px solid var(--color-line);
+      background: var(--color-paper);
+      box-shadow: 0 1rem 2.5rem rgba(23, 35, 29, 0.12);
+    }
+    .mobile-menu a {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--color-line);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .mobile-menu a:last-child { border-bottom: 0; }
+  }
+
+  @media (max-width: 430px) {
+    .brand small { display: none; }
+  }
+</style>

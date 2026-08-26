@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { localePath, type Locale } from '../lib/site';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const copy = locale === 'es' ? {
+  title: 'Sobre mí', eyebrow: 'Perfil / 01', heading: 'Pensamiento espacial. Ingeniería práctica.',
+  intro: 'Soy un perfil técnico especializado en construir sistemas donde el territorio, los datos y el software tienen que entenderse entre sí.',
+  storyTitle: 'Más allá del modelo.',
+  story: ['Mi trabajo empieza antes del entrenamiento: entender cómo se capturó el dato, qué representa realmente y dónde puede romperse el razonamiento espacial.', 'Después convierto ese conocimiento en pipelines reproducibles, modelos medibles y herramientas que hacen visible el resultado. El objetivo es que una solución no solo funcione una vez, sino que pueda explicarse, mantenerse y evolucionar.'],
+  methodLabel: 'Método / 02', methodTitle: 'Cómo abordo el trabajo',
+  methods: [
+    { n: '01', title: 'Entender el territorio', body: 'Contexto, escala, sistemas de referencia y límites reales antes de elegir herramientas.' },
+    { n: '02', title: 'Diseñar la evidencia', body: 'Datos, validación espacial y métricas capaces de sostener una decisión técnica.' },
+    { n: '03', title: 'Construir el sistema', body: 'Automatización, observabilidad y una interfaz proporcionada al problema.' },
+  ],
+  stackLabel: 'Capacidades / 03', stackTitle: 'Herramientas al servicio del problema.',
+  groups: [
+    ['Geospatial', 'GDAL · Rasterio · GeoPandas · PostGIS · STAC'],
+    ['ML / Data', 'PyTorch · scikit-learn · MLflow · DVC · Python'],
+    ['Point clouds', 'PDAL · COPC · CloudCompare · 3D Tiles'],
+    ['Product', 'TypeScript · Astro · CesiumJS · APIs · CI/CD'],
+  ],
+  cta: 'Ver proyectos',
+} : {
+  title: 'About', eyebrow: 'Profile / 01', heading: 'Spatial thinking. Practical engineering.',
+  intro: 'I am a technical specialist focused on building systems where territory, data, and software need to understand each other.',
+  storyTitle: 'Beyond the model.',
+  story: ['My work starts before training: understanding how data was captured, what it truly represents, and where spatial reasoning can break.', 'I then turn that knowledge into reproducible pipelines, measurable models, and tools that make outcomes visible. The goal is not only to make a solution work once, but to make it explainable, maintainable, and able to evolve.'],
+  methodLabel: 'Method / 02', methodTitle: 'How I approach the work',
+  methods: [
+    { n: '01', title: 'Understand the territory', body: 'Context, scale, reference systems, and real constraints before choosing tools.' },
+    { n: '02', title: 'Design the evidence', body: 'Data, spatial validation, and metrics capable of supporting a technical decision.' },
+    { n: '03', title: 'Build the system', body: 'Automation, observability, and an interface proportionate to the problem.' },
+  ],
+  stackLabel: 'Capabilities / 03', stackTitle: 'Tools in service of the problem.',
+  groups: [
+    ['Geospatial', 'GDAL · Rasterio · GeoPandas · PostGIS · STAC'],
+    ['ML / Data', 'PyTorch · scikit-learn · MLflow · DVC · Python'],
+    ['Point clouds', 'PDAL · COPC · CloudCompare · 3D Tiles'],
+    ['Product', 'TypeScript · Astro · CesiumJS · APIs · CI/CD'],
+  ],
+  cta: 'View projects',
+};
+---
+
+<BaseLayout locale={locale} title={copy.title} description={copy.intro}>
+  <header class="page-shell about-hero">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <h1 class="display-title">{copy.heading}</h1>
+    <p class="lede">{copy.intro}</p>
+  </header>
+
+  <section class="section-pad rule">
+    <div class="page-shell story-grid">
+      <div class="portrait-placeholder blueprint-card" aria-hidden="true">
+        <span>PORTRAIT / PLACEHOLDER</span>
+        <strong>NA</strong>
+        <small>40.4168° N / 3.7038° W</small>
+      </div>
+      <div class="story-copy">
+        <p class="eyebrow">BIO / A—01</p>
+        <h2 class="section-title">{copy.storyTitle}</h2>
+        {copy.story.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad method-section">
+    <div class="page-shell">
+      <p class="eyebrow">{copy.methodLabel}</p>
+      <h2 class="section-title">{copy.methodTitle}</h2>
+      <div class="method-grid">
+        {copy.methods.map((method) => <article><span>{method.n}</span><h3>{method.title}</h3><p>{method.body}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad rule">
+    <div class="page-shell capability-grid">
+      <div><p class="eyebrow">{copy.stackLabel}</p><h2 class="section-title">{copy.stackTitle}</h2></div>
+      <div class="capability-list">
+        {copy.groups.map(([name, tools]) => <div><strong>{name}</strong><span>{tools}</span></div>)}
+      </div>
+    </div>
+    <div class="page-shell about-cta"><a class="button-primary" href={localePath(locale, '/projects')}>{copy.cta}<span aria-hidden="true">↗</span></a></div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-hero { padding-block: clamp(6rem, 12vw, 11rem); }
+  .about-hero h1 { max-width: 12ch; margin-top: 2rem; }
+  .about-hero .lede { margin: 2rem 0 0 auto; }
+  .story-grid { display: grid; grid-template-columns: minmax(19rem, 0.8fr) 1.2fr; align-items: center; gap: clamp(3rem, 9vw, 9rem); }
+  .portrait-placeholder { display: grid; min-height: 34rem; place-items: center; background: var(--color-forest); color: var(--color-paper); }
+  .portrait-placeholder::after { border-color: rgba(244, 240, 231, 0.7); }
+  .portrait-placeholder span,
+  .portrait-placeholder small { position: absolute; color: rgba(244, 240, 231, 0.6); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; }
+  .portrait-placeholder span { top: 1.3rem; left: 1.3rem; }
+  .portrait-placeholder small { right: 1.3rem; bottom: 1.3rem; }
+  .portrait-placeholder strong { font-family: var(--font-serif); font-size: clamp(5rem, 12vw, 10rem); font-weight: 400; letter-spacing: -0.08em; }
+  .story-copy h2 { margin: 1.5rem 0 2rem; }
+  .story-copy > p:not(.eyebrow) { margin: 0 0 1.2rem; color: var(--color-muted); font-size: 1rem; line-height: 1.85; }
+  .method-section { background: color-mix(in srgb, var(--color-paper-deep) 52%, transparent); }
+  .method-section h2 { margin-top: 1.4rem; }
+  .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 4rem; border-top: 1px solid var(--color-line); }
+  .method-grid article { min-height: 19rem; padding: 1.5rem 2rem 1.5rem 0; border-right: 1px solid var(--color-line); }
+  .method-grid article + article { padding-left: 2rem; }
+  .method-grid span { color: var(--color-signal); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; }
+  .method-grid h3 { margin: 5rem 0 1rem; font-family: var(--font-serif); font-size: 1.6rem; font-weight: 520; }
+  .method-grid p { margin: 0; color: var(--color-muted); font-size: 0.82rem; line-height: 1.7; }
+  .capability-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(3rem, 9vw, 9rem); }
+  .capability-grid h2 { margin-top: 1.5rem; }
+  .capability-list { border-top: 1px solid var(--color-line); }
+  .capability-list div { display: grid; grid-template-columns: 9rem 1fr; gap: 1rem; padding-block: 1.4rem; border-bottom: 1px solid var(--color-line); }
+  .capability-list strong { color: var(--color-forest); font-size: 0.72rem; text-transform: uppercase; }
+  .capability-list span { color: var(--color-muted); font-size: 0.82rem; line-height: 1.6; }
+  .about-cta { margin-top: 3rem; text-align: right; }
+  @media (max-width: 760px) {
+    .story-grid,
+    .capability-grid { grid-template-columns: 1fr; }
+    .portrait-placeholder { min-height: 24rem; }
+    .method-grid { grid-template-columns: 1fr; }
+    .method-grid article,
+    .method-grid article + article { min-height: auto; padding: 1.5rem 0 2.5rem; border-right: 0; border-bottom: 1px solid var(--color-line); }
+    .method-grid h3 { margin-top: 2rem; }
+  }
+</style>

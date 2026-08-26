@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import type { Locale } from '../lib/site';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const projects = (await getCollection('projects')).sort((a, b) => Number(b.data.featured) - Number(a.data.featured));
+const copy = locale === 'es' ? {
+  title: 'Proyectos', eyebrow: 'Archivo técnico / 01', heading: 'Trabajo seleccionado, sin silos.',
+  intro: 'Una colección abierta de sistemas geoespaciales, experimentos aplicados y productos técnicos. Usa las etiquetas para recorrer tecnologías y temas que se cruzan entre proyectos.',
+  note: 'Todos los datos y métricas son placeholders en esta primera estructura.',
+} : {
+  title: 'Projects', eyebrow: 'Technical archive / 01', heading: 'Selected work, without silos.',
+  intro: 'An open collection of geospatial systems, applied experiments, and technical products. Use tags to navigate technologies and themes that overlap across projects.',
+  note: 'All data and metrics are placeholders in this initial structure.',
+};
+---
+
+<BaseLayout locale={locale} title={copy.title} description={copy.intro}>
+  <header class="page-shell page-hero">
+    <p class="eyebrow">{copy.eyebrow}</p>
+    <div class="heading-grid">
+      <h1 class="display-title">{copy.heading}</h1>
+      <div><p class="lede">{copy.intro}</p><p class="note">{copy.note}</p></div>
+    </div>
+  </header>
+  <section class="page-shell projects-section">
+    <ProjectGrid projects={projects} locale={locale} filterable />
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: clamp(5rem, 10vw, 9rem); }
+  .heading-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; align-items: end; gap: clamp(3rem, 8vw, 8rem); margin-top: 2rem; }
+  .heading-grid .lede { margin: 0; }
+  .note { margin: 1.5rem 0 0; padding-left: 1rem; border-left: 1px solid var(--color-signal); color: var(--color-muted); font-size: 0.7rem; line-height: 1.6; }
+  .projects-section { padding-bottom: clamp(6rem, 12vw, 10rem); }
+  @media (max-width: 720px) { .heading-grid { grid-template-columns: 1fr; gap: 2rem; } }
+</style>

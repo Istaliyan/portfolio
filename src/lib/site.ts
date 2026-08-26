@@ -1,0 +1,59 @@
+export type Locale = 'es' | 'en';
+
+export const site = {
+  name: 'Nombre Apellido',
+  role: {
+    es: 'ML & Geospatial Engineer',
+    en: 'ML & Geospatial Engineer',
+  },
+  email: 'hello@example.com',
+  github: 'https://github.com/username',
+  linkedin: 'https://www.linkedin.com/in/username',
+};
+
+export const ui = {
+  es: {
+    nav: { home: 'Inicio', projects: 'Proyectos', about: 'Sobre mí', contact: 'Contacto' },
+    language: 'English',
+    all: 'Todos',
+    projects: 'Proyectos',
+    viewProject: 'Ver proyecto',
+    selectedWork: 'Proyectos destacados',
+    backToProjects: 'Volver a proyectos',
+  },
+  en: {
+    nav: { home: 'Home', projects: 'Projects', about: 'About', contact: 'Contact' },
+    language: 'Español',
+    all: 'All',
+    projects: 'Projects',
+    viewProject: 'View project',
+    selectedWork: 'Selected projects',
+    backToProjects: 'Back to projects',
+  },
+} as const;
+
+export function withBase(path = '/'): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${normalized}` || '/';
+}
+
+export function stripBase(pathname: string): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  const path = base && pathname.startsWith(base) ? pathname.slice(base.length) : pathname;
+  return path || '/';
+}
+
+export function localePath(locale: Locale, path = '/'): string {
+  const cleanPath = path === '/' ? '' : `/${path.replace(/^\/+|\/+$/g, '')}`;
+  return withBase(locale === 'en' ? `/en${cleanPath}/` : `${cleanPath}/`);
+}
+
+export function alternateLocalePath(locale: Locale, pathname: string): string {
+  const route = stripBase(pathname).replace(/\/$/, '') || '/';
+  if (locale === 'en') {
+    const spanishRoute = route.replace(/^\/en(?=\/|$)/, '') || '/';
+    return withBase(spanishRoute === '/' ? '/' : `${spanishRoute}/`);
+  }
+  return withBase(`/en${route === '/' ? '/' : `${route}/`}`);
+}
