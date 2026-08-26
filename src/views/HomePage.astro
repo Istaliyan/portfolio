@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import HeroShader from '../components/HeroShader.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { localePath, site, type Locale } from '../lib/site';
@@ -68,23 +69,26 @@ const copy = locale === 'es' ? {
 ---
 
 <BaseLayout locale={locale} description={copy.description}>
-  <section class="hero page-shell">
-    <div class="hero-copy">
-      <div class="eyebrow">{copy.status}</div>
-      <h1 class="display-title">{copy.heroA}<br /><em>{copy.heroB}</em></h1>
-      <p class="lede">{copy.intro}</p>
-      <div class="hero-actions">
-        <a class="button-primary" href={localePath(locale, '/projects')}>{copy.seeProjects}<span aria-hidden="true">↗</span></a>
-        <a class="button-secondary" href={localePath(locale, '/contact')}>{copy.contact}</a>
+  <section class="hero-shell">
+    <HeroShader />
+    <div class="hero page-shell">
+      <div class="hero-copy">
+        <div class="eyebrow">{copy.status}</div>
+        <h1 class="display-title">{copy.heroA}<br /><em>{copy.heroB}</em></h1>
+        <p class="lede">{copy.intro}</p>
+        <div class="hero-actions">
+          <a class="button-primary" href={localePath(locale, '/projects')}>{copy.seeProjects}<span aria-hidden="true">↗</span></a>
+          <a class="button-secondary" href={localePath(locale, '/contact')}>{copy.contact}</a>
+        </div>
       </div>
+      <div class="hero-instrument blueprint-card" aria-hidden="true">
+        <div class="instrument-meta"><span>DATUM / ETRS89</span><span>ALT / 667M</span></div>
+        <div class="orbital"><div class="orbital-point"></div></div>
+        <div class="instrument-coords">40° 25′ 08″ N<br />03° 41′ 31″ W</div>
+        <div class="instrument-scale"><span>0</span><span>25</span><span>50 KM</span></div>
+      </div>
+      <div class="hero-foot"><span>PORTFOLIO / 2026</span><span>SCROLL ↓</span></div>
     </div>
-    <div class="hero-instrument blueprint-card" aria-hidden="true">
-      <div class="instrument-meta"><span>DATUM / ETRS89</span><span>ALT / 667M</span></div>
-      <div class="orbital"><div class="orbital-point"></div></div>
-      <div class="instrument-coords">40° 25′ 08″ N<br />03° 41′ 31″ W</div>
-      <div class="instrument-scale"><span>0</span><span>25</span><span>50 KM</span></div>
-    </div>
-    <div class="hero-foot"><span>PORTFOLIO / 2026</span><span>SCROLL ↓</span></div>
   </section>
 
   <section class="section-pad rule">
@@ -139,37 +143,38 @@ const copy = locale === 'es' ? {
 </BaseLayout>
 
 <style>
-  .hero { position: relative; display: grid; min-height: calc(100vh - 5.4rem); grid-template-columns: minmax(0, 1.35fr) minmax(19rem, 0.65fr); align-items: center; gap: clamp(3rem, 8vw, 8rem); padding-block: 5rem 4rem; }
-  .hero-copy { position: relative; z-index: 1; }
-  .hero h1 { margin-top: 1.7rem; }
+  .hero-shell { position: relative; isolation: isolate; overflow: hidden; }
+  .hero { position: relative; z-index: 1; display: grid; min-height: min(47rem, calc(100vh - 4.75rem)); grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.58fr); align-items: center; gap: clamp(2.5rem, 6vw, 6rem); padding-block: 3.5rem 3rem; }
+  .hero-copy { position: relative; z-index: 2; }
+  .hero h1 { margin-top: 1.25rem; }
   .hero h1 em { color: var(--color-forest); font-weight: 430; }
-  .hero .lede { max-width: 37rem; margin: 2rem 0 0; }
-  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 2.2rem; }
-  .hero-instrument { position: relative; aspect-ratio: 0.8; padding: 1.1rem; background: rgba(244, 240, 231, 0.34); }
-  .instrument-meta { display: flex; justify-content: space-between; color: var(--color-muted); font-size: 0.55rem; font-weight: 700; letter-spacing: 0.09em; }
-  .orbital { position: absolute; inset: 15%; border: 1px solid rgba(21, 61, 48, 0.25); border-radius: 50%; }
+  .hero .lede { max-width: 37rem; margin: 1.5rem 0 0; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.7rem; }
+  .hero-instrument { position: relative; z-index: 2; isolation: isolate; aspect-ratio: 0.8; padding: 1.1rem; background: rgba(244, 240, 231, 0.3); backdrop-filter: blur(3px); }
+  .instrument-meta { position: relative; z-index: 2; display: flex; justify-content: space-between; color: var(--color-muted); font-size: 0.55rem; font-weight: 700; letter-spacing: 0.09em; }
+  .orbital { position: absolute; z-index: 1; inset: 15%; border: 1px solid rgba(21, 61, 48, 0.44); border-radius: 50%; background: radial-gradient(circle, rgba(244, 240, 231, 0.13), transparent 68%); filter: drop-shadow(0 0 6px rgba(244, 240, 231, 0.62)); }
   .orbital::before,
-  .orbital::after { position: absolute; border: 1px solid rgba(21, 61, 48, 0.12); border-radius: 50%; content: ""; }
+  .orbital::after { position: absolute; border: 1px solid rgba(21, 61, 48, 0.24); border-radius: inherit; content: ""; }
   .orbital::before { inset: 15%; }
   .orbital::after { inset: 35%; }
-  .orbital-point { position: absolute; top: 11%; right: 13%; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--color-signal); box-shadow: 0 0 0 7px rgba(189, 107, 67, 0.12); animation: pulse-point 2.8s ease-in-out infinite; }
-  .instrument-coords { position: absolute; top: 46%; right: 0; left: 0; color: var(--color-forest); font-family: var(--font-serif); font-size: clamp(1.2rem, 2.2vw, 2rem); line-height: 1.15; text-align: center; }
-  .instrument-scale { position: absolute; right: 1rem; bottom: 1rem; left: 1rem; display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 3px double var(--color-forest); color: var(--color-muted); font-size: 0.55rem; font-weight: 700; }
-  .hero-foot { position: absolute; right: 0; bottom: 1rem; left: 0; display: flex; justify-content: space-between; color: var(--color-muted); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; }
+  .orbital-point { position: absolute; top: 11%; right: 13%; width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--color-signal); box-shadow: 0 0 0 7px rgba(189, 107, 67, 0.1); animation: pulse-point 2.8s ease-in-out infinite; }
+  .instrument-coords { position: absolute; z-index: 2; top: 46%; right: 0; left: 0; color: var(--color-forest); font-family: var(--font-serif); font-size: clamp(1.2rem, 2.2vw, 2rem); line-height: 1.15; text-align: center; }
+  .instrument-scale { position: absolute; z-index: 2; right: 1rem; bottom: 1rem; left: 1rem; display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 3px double var(--color-forest); color: var(--color-muted); font-size: 0.55rem; font-weight: 700; }
+  .hero-foot { position: absolute; z-index: 2; right: 0; bottom: 1rem; left: 0; display: flex; justify-content: space-between; color: var(--color-muted); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; }
   .profile-grid { display: grid; grid-template-columns: minmax(12rem, 0.45fr) 1fr; gap: clamp(3rem, 8vw, 8rem); }
-  .profile-grid .lede { margin: 2rem 0 0; }
-  .principles { display: grid; grid-template-columns: repeat(3, 1fr); margin: 3rem 0 0; padding: 0; border-top: 1px solid var(--color-line); list-style: none; }
+  .profile-grid .lede { margin: 1.5rem 0 0; }
+  .principles { display: grid; grid-template-columns: repeat(3, 1fr); margin: 2.2rem 0 0; padding: 0; border-top: 1px solid var(--color-line); list-style: none; }
   .principles li { padding: 1.2rem 1rem 0 0; color: var(--color-forest); font-size: 0.78rem; font-weight: 700; }
   .principles span { display: block; margin-bottom: 0.6rem; color: var(--color-muted); font-size: 0.58rem; letter-spacing: 0.08em; }
   .expertise-section { background: color-mix(in srgb, var(--color-paper-deep) 52%, transparent); }
-  .section-head { display: grid; grid-template-columns: 1fr 0.72fr; align-items: end; gap: 3rem; margin-bottom: 4rem; }
+  .section-head { display: grid; grid-template-columns: 1fr 0.72fr; align-items: end; gap: 3rem; margin-bottom: 2.8rem; }
   .section-head .section-title { margin-top: 1rem; }
   .section-head .lede { margin: 0; }
   .expertise-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
-  .expertise-card { min-height: 23rem; margin-left: -1px; padding: 1.4rem; }
+  .expertise-card { min-height: 17.5rem; margin-left: -1px; padding: 1.25rem; }
   .expertise-code { display: flex; align-items: start; justify-content: space-between; color: var(--color-forest); font-family: var(--font-serif); font-size: 2rem; }
   .expertise-code small { color: var(--color-muted); font-family: var(--font-sans); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; }
-  .expertise-card h3 { margin: 7rem 0 1rem; font-family: var(--font-serif); font-size: 1.45rem; font-weight: 540; line-height: 1.1; }
+  .expertise-card h3 { margin: 4.2rem 0 0.8rem; font-family: var(--font-serif); font-size: 1.3rem; font-weight: 540; line-height: 1.1; }
   .expertise-card p { margin: 0; color: var(--color-muted); font-size: 0.78rem; line-height: 1.65; }
   .projects-head { grid-template-columns: 1fr auto; }
   .text-link { display: flex; align-items: center; gap: 1rem; color: var(--color-forest); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
@@ -177,7 +182,7 @@ const copy = locale === 'es' ? {
   .contact-panel { padding: clamp(2rem, 6vw, 5rem); background: color-mix(in srgb, var(--color-paper-deep) 65%, transparent); }
   .contact-panel .section-title { max-width: 18ch; margin-top: 1.5rem; }
   .contact-panel .lede { margin: 1.5rem 0 2.5rem; }
-  @keyframes pulse-point { 50% { transform: scale(1.2); box-shadow: 0 0 0 12px rgba(189, 107, 67, 0.06); } }
+  @keyframes pulse-point { 50% { transform: scale(1.2); box-shadow: 0 0 0 12px rgba(189, 107, 67, 0.05); } }
   @media (max-width: 900px) {
     .hero { min-height: auto; grid-template-columns: 1fr; }
     .hero-instrument { width: min(100%, 24rem); aspect-ratio: 1.2; }
@@ -189,8 +194,8 @@ const copy = locale === 'es' ? {
     .principles { grid-template-columns: 1fr; }
     .principles li { padding-bottom: 1rem; border-bottom: 1px solid var(--color-line); }
     .expertise-grid { grid-template-columns: 1fr; }
-    .expertise-card { min-height: 18rem; }
-    .expertise-card h3 { margin-top: 4rem; }
+    .expertise-card { min-height: 15rem; }
+    .expertise-card h3 { margin-top: 3rem; }
     .projects-head { grid-template-columns: 1fr; }
   }
 </style>

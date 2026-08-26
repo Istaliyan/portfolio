@@ -92,10 +92,10 @@ const copy = locale === 'es' ? {
 </BaseLayout>
 
 <style>
-  .project-hero { padding-block: 3rem clamp(5rem, 10vw, 9rem); }
+  .project-hero { padding-block: 2.5rem clamp(4rem, 7vw, 6.5rem); }
   .back-link { display: inline-flex; align-items: center; gap: 0.7rem; color: var(--color-forest); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
   .back-link:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
-  .project-kicker { display: flex; gap: 1.4rem; margin-top: clamp(4rem, 8vw, 8rem); color: var(--color-muted); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .project-kicker { display: flex; gap: 1.4rem; margin-top: clamp(3rem, 5vw, 4.5rem); color: var(--color-muted); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
   .project-hero h1 { max-width: 14ch; margin-top: 1.5rem; }
   .hero-details { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; margin-top: 2.5rem; }
   .hero-details .lede { margin: 0; }
@@ -105,10 +105,10 @@ const copy = locale === 'es' ? {
   .section-marker.horizontal { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
   .section-marker.horizontal span { margin: 0; }
   .prose p,
-  .architecture-intro { max-width: 48rem; margin: 2rem 0 0; color: var(--color-muted); font-size: 1rem; line-height: 1.9; }
+  .architecture-intro { max-width: 48rem; margin: 1.5rem 0 0; color: var(--color-muted); font-size: 1rem; line-height: 1.8; }
   .demo-section { background: color-mix(in srgb, var(--color-paper-deep) 50%, transparent); }
-  .architecture-flow { margin: 3rem 0 0; padding: 0; border-top: 1px solid var(--color-line); list-style: none; }
-  .architecture-flow li { position: relative; display: grid; grid-template-columns: 4rem 1fr auto; align-items: center; gap: 1rem; min-height: 6rem; border-bottom: 1px solid var(--color-line); }
+  .architecture-flow { margin: 2.2rem 0 0; padding: 0; border-top: 1px solid var(--color-line); list-style: none; }
+  .architecture-flow li { position: relative; display: grid; grid-template-columns: 4rem 1fr auto; align-items: center; gap: 1rem; min-height: 5rem; border-bottom: 1px solid var(--color-line); }
   .architecture-flow li::before { position: absolute; top: -1px; left: 1.85rem; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--color-signal); content: ""; }
   .architecture-flow li > span { color: var(--color-muted); font-size: 0.62rem; font-weight: 700; }
   .architecture-flow strong { color: var(--color-forest); font-family: var(--font-serif); font-size: 1.2rem; font-weight: 520; }
@@ -130,7 +130,7 @@ const copy = locale === 'es' ? {
   .results-head { display: flex; align-items: start; justify-content: space-between; gap: 2rem; }
   .results-head > p { max-width: 22rem; margin: 0; color: var(--color-muted); font-size: 0.68rem; line-height: 1.6; text-align: right; }
   .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 2rem; border-block: 1px solid var(--color-line); }
-  .results-grid div { min-height: 13rem; padding: 2rem; border-right: 1px solid var(--color-line); }
+  .results-grid div { min-height: 10rem; padding: 1.5rem; border-right: 1px solid var(--color-line); }
   .results-grid div:last-child { border-right: 0; }
   .results-grid strong,
   .results-grid span { display: block; }

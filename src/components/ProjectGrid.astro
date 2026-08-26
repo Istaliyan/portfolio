@@ -66,7 +66,7 @@ const tags = [...new Set(projects.flatMap((project) => project.data.tags))].sort
   .filter-chip { min-height: 2rem; padding: 0.35rem 0.7rem; border: 1px solid var(--color-line); background: transparent; color: var(--color-muted); cursor: pointer; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.045em; text-transform: uppercase; transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease; }
   .filter-chip:hover { border-color: var(--color-forest); color: var(--color-forest); }
   .filter-chip[aria-pressed="true"] { border-color: var(--color-forest); background: var(--color-forest); color: var(--color-paper); }
-  .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .project-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1rem; }
   [hidden] { display: none; }
   @media (max-width: 780px) {
     .project-grid { grid-template-columns: 1fr; }

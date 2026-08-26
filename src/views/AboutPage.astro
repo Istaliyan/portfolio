@@ -89,11 +89,11 @@ const copy = locale === 'es' ? {
 </BaseLayout>
 
 <style>
-  .about-hero { padding-block: clamp(6rem, 12vw, 11rem); }
+  .about-hero { padding-block: clamp(4.5rem, 8vw, 7.5rem); }
   .about-hero h1 { max-width: 12ch; margin-top: 2rem; }
   .about-hero .lede { margin: 2rem 0 0 auto; }
   .story-grid { display: grid; grid-template-columns: minmax(19rem, 0.8fr) 1.2fr; align-items: center; gap: clamp(3rem, 9vw, 9rem); }
-  .portrait-placeholder { display: grid; min-height: 34rem; place-items: center; background: var(--color-forest); color: var(--color-paper); }
+  .portrait-placeholder { display: grid; min-height: 27rem; place-items: center; background: var(--color-forest); color: var(--color-paper); }
   .portrait-placeholder::after { border-color: rgba(244, 240, 231, 0.7); }
   .portrait-placeholder span,
   .portrait-placeholder small { position: absolute; color: rgba(244, 240, 231, 0.6); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; }
@@ -104,11 +104,11 @@ const copy = locale === 'es' ? {
   .story-copy > p:not(.eyebrow) { margin: 0 0 1.2rem; color: var(--color-muted); font-size: 1rem; line-height: 1.85; }
   .method-section { background: color-mix(in srgb, var(--color-paper-deep) 52%, transparent); }
   .method-section h2 { margin-top: 1.4rem; }
-  .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 4rem; border-top: 1px solid var(--color-line); }
-  .method-grid article { min-height: 19rem; padding: 1.5rem 2rem 1.5rem 0; border-right: 1px solid var(--color-line); }
+  .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 3rem; border-top: 1px solid var(--color-line); }
+  .method-grid article { min-height: 15rem; padding: 1.5rem 2rem 1.5rem 0; border-right: 1px solid var(--color-line); }
   .method-grid article + article { padding-left: 2rem; }
   .method-grid span { color: var(--color-signal); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; }
-  .method-grid h3 { margin: 5rem 0 1rem; font-family: var(--font-serif); font-size: 1.6rem; font-weight: 520; }
+  .method-grid h3 { margin: 3rem 0 0.8rem; font-family: var(--font-serif); font-size: 1.45rem; font-weight: 520; }
   .method-grid p { margin: 0; color: var(--color-muted); font-size: 0.82rem; line-height: 1.7; }
   .capability-grid { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: clamp(3rem, 9vw, 9rem); }
   .capability-grid h2 { margin-top: 1.5rem; }
