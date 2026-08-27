@@ -1,20 +1,12 @@
 {
   "title": { "es": "Visor urbano 3D", "en": "3D urban viewer" },
   "summary": { "es": "Experiencia Web GIS para explorar datos urbanos 3D, capas analíticas y escenarios desde el navegador.", "en": "A Web GIS experience for exploring 3D urban data, analytical layers, and scenarios in the browser." },
-  "problem": { "es": "Los datasets urbanos 3D suelen vivir en herramientas aisladas. Este proyecto de muestra los reúne en una interfaz web progresiva y comprensible.", "en": "Urban 3D datasets often live in isolated tools. This sample project brings them together in a progressive, understandable web interface." },
   "year": 2026,
   "featured": false,
   "tags": ["Cesium", "Web GIS", "3D Tiles"],
-  "technologies": ["CesiumJS", "TypeScript", "3D Tiles", "PostGIS"],
-  "architecture": [
-    { "es": "Preparación de activos 3D", "en": "3D asset preparation" },
-    { "es": "Servicios geoespaciales", "en": "Geospatial services" },
-    { "es": "Cliente de visualización", "en": "Visualization client" },
-    { "es": "Medición y observabilidad", "en": "Measurement and observability" }
-  ],
-  "results": [
-    { "value": "00 GB", "label": { "es": "datos servidos", "en": "data served" } },
-    { "value": "00 ms", "label": { "es": "interacción objetivo", "en": "target interaction" } },
-    { "value": "00", "label": { "es": "capas integradas", "en": "integrated layers" } }
-  ]
+  "cover": "../../assets/projects/urban-digital-twin.png",
+  "coverAlt": {
+    "es": "Modelo urbano tridimensional construido sobre capas geoespaciales",
+    "en": "Three-dimensional city model built from layered geospatial data"
+  }
 }

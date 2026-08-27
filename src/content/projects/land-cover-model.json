@@ -1,20 +1,12 @@
 {
   "title": { "es": "Clasificación de cobertura GeoAI", "en": "GeoAI land-cover classification" },
   "summary": { "es": "Sistema de ML espacial para clasificar cobertura del suelo con trazabilidad desde el dato hasta la inferencia.", "en": "A spatial ML system for land-cover classification with traceability from data to inference." },
-  "problem": { "es": "Los modelos geoespaciales fallan cuando el muestreo, la división espacial y el seguimiento de experimentos no se diseñan como un único sistema.", "en": "Geospatial models fail when sampling, spatial splitting, and experiment tracking are not designed as a single system." },
   "year": 2026,
   "featured": true,
   "tags": ["GeoAI", "Machine Learning", "MLOps"],
-  "technologies": ["PyTorch", "scikit-learn", "MLflow", "DVC"],
-  "architecture": [
-    { "es": "Construcción del dataset espacial", "en": "Spatial dataset construction" },
-    { "es": "Entrenamiento y validación por bloques", "en": "Block-based training and validation" },
-    { "es": "Registro de experimentos", "en": "Experiment tracking" },
-    { "es": "Inferencia por lotes", "en": "Batch inference" }
-  ],
-  "results": [
-    { "value": "0.00", "label": { "es": "F1 macro", "en": "macro F1" } },
-    { "value": "00", "label": { "es": "experimentos", "en": "experiments" } },
-    { "value": "00%", "label": { "es": "menos deriva", "en": "less drift" } }
-  ]
+  "cover": "../../assets/projects/land-cover-model.png",
+  "coverAlt": {
+    "es": "Mosaico de datos satelitales transformado en clases de cobertura del suelo",
+    "en": "Satellite data mosaic transformed into land-cover classes"
+  }
 }

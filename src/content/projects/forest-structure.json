@@ -1,20 +1,12 @@
 {
   "title": { "es": "Estructura forestal con LiDAR", "en": "Forest structure from LiDAR" },
   "summary": { "es": "Procesamiento de nubes de puntos para estimar métricas de vegetación y generar productos listos para análisis.", "en": "Point-cloud processing to estimate vegetation metrics and generate analysis-ready products." },
-  "problem": { "es": "Las nubes de puntos brutas requieren una cadena consistente de clasificación, normalización y agregación antes de producir métricas forestales fiables.", "en": "Raw point clouds require a consistent classification, normalization, and aggregation pipeline before reliable forest metrics can be produced." },
   "year": 2026,
   "featured": true,
   "tags": ["LiDAR", "Point Clouds", "PDAL"],
-  "technologies": ["PDAL", "Python", "COPC", "QGIS"],
-  "architecture": [
-    { "es": "Ingesta y control de calidad", "en": "Ingestion and quality control" },
-    { "es": "Clasificación y normalización", "en": "Classification and normalization" },
-    { "es": "Cálculo de métricas", "en": "Metric computation" },
-    { "es": "Teselado y entrega", "en": "Tiling and delivery" }
-  ],
-  "results": [
-    { "value": "00 M", "label": { "es": "puntos procesados", "en": "points processed" } },
-    { "value": "00 cm", "label": { "es": "resolución final", "en": "output resolution" } },
-    { "value": "00 h", "label": { "es": "tiempo ahorrado", "en": "hours saved" } }
-  ]
+  "cover": "../../assets/projects/forest-structure.png",
+  "coverAlt": {
+    "es": "Bosque reconstruido mediante capas y nubes de puntos LiDAR",
+    "en": "Forest reconstructed from LiDAR point clouds and elevation layers"
+  }
 }

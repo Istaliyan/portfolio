@@ -1,20 +1,12 @@
 {
   "title": { "es": "Detección de cambios costeros", "en": "Coastal change detection" },
   "summary": { "es": "Pipeline reproducible para identificar cambios en la línea de costa a partir de series temporales multiespectrales.", "en": "A reproducible pipeline for identifying coastline shifts from multispectral time series." },
-  "problem": { "es": "La monitorización manual de grandes extensiones costeras es lenta y difícil de reproducir. Este proyecto de muestra plantea una cadena automatizada para normalizar escenas, extraer agua y comparar geometrías a lo largo del tiempo.", "en": "Manual monitoring of long coastlines is slow and difficult to reproduce. This sample project proposes an automated chain to normalize scenes, extract water, and compare geometries over time." },
   "year": 2026,
   "featured": true,
   "tags": ["Sentinel-2", "Remote Sensing", "Python"],
-  "technologies": ["Python", "Rasterio", "GeoPandas", "STAC"],
-  "architecture": [
-    { "es": "Consulta y selección de escenas", "en": "Scene query and selection" },
-    { "es": "Corrección y enmascarado de nubes", "en": "Correction and cloud masking" },
-    { "es": "Extracción y validación geométrica", "en": "Geometric extraction and validation" },
-    { "es": "Publicación de resultados", "en": "Result publishing" }
-  ],
-  "results": [
-    { "value": "00 km", "label": { "es": "costa analizada", "en": "coastline analyzed" } },
-    { "value": "00%", "label": { "es": "precisión de muestra", "en": "sample accuracy" } },
-    { "value": "00×", "label": { "es": "flujo más rápido", "en": "faster workflow" } }
-  ]
+  "cover": "../../assets/projects/coastal-change.png",
+  "coverAlt": {
+    "es": "Visualización abstracta de una línea de costa y sus cambios temporales",
+    "en": "Abstract visualization of a coastline and its changes over time"
+  }
 }

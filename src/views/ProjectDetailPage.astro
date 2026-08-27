@@ -1,6 +1,6 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import YouTubeFacade from '../components/YouTubeFacade.astro';
+import { Image } from 'astro:assets';
+import { getEntry, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { localePath, ui, type Locale } from '../lib/site';
 
@@ -13,16 +13,26 @@ const { locale, project } = Astro.props;
 const data = project.data;
 const title = data.title[locale];
 const summary = data.summary[locale];
+const caseStudy = await getEntry('caseStudies', `${project.id}/${locale}`);
+
+if (!caseStudy) {
+  throw new Error(`Missing ${locale} case study for project "${project.id}".`);
+}
+
+const { Content } = await render(caseStudy);
+const hasProjectLinks = Boolean(data.repositoryUrl || data.demoUrl);
 const copy = locale === 'es' ? {
-  caseStudy: 'Caso de estudio', problem: 'Problema', demo: 'Vídeo / Demo', architecture: 'Arquitectura',
-  architectureIntro: 'Flujo conceptual del sistema. Sustituye estos pasos por el diagrama y las decisiones reales del proyecto.',
-  technologies: 'Tecnologías', results: 'Resultados', resultNote: 'Métricas provisionales para definir la futura composición.',
-  projectLinks: 'Enlaces del proyecto', repository: 'Repositorio', liveDemo: 'Demo en vivo', unavailable: 'Se añadirán cuando el proyecto esté publicado.',
+  caseStudy: 'Caso de estudio',
+  narrative: 'Memoria técnica',
+  projectLinks: 'Enlaces del proyecto',
+  repository: 'Repositorio',
+  liveDemo: 'Demo en vivo',
 } : {
-  caseStudy: 'Case study', problem: 'Problem', demo: 'Video / Demo', architecture: 'Architecture',
-  architectureIntro: 'Conceptual system flow. Replace these steps with the real project diagram and decisions.',
-  technologies: 'Technologies', results: 'Results', resultNote: 'Provisional metrics defining the future composition.',
-  projectLinks: 'Project links', repository: 'Repository', liveDemo: 'Live demo', unavailable: 'These will be added when the project is published.',
+  caseStudy: 'Case study',
+  narrative: 'Technical narrative',
+  projectLinks: 'Project links',
+  repository: 'Repository',
+  liveDemo: 'Live demo',
 };
 ---
 
@@ -35,119 +45,83 @@ const copy = locale === 'es' ? {
       <p class="lede">{summary}</p>
       <div class="tags">{data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
     </div>
+    <figure class="project-cover blueprint-card">
+      <Image src={data.cover} alt={data.coverAlt[locale]} layout="full-width" priority />
+    </figure>
   </header>
 
   <section class="section-pad rule">
     <div class="page-shell content-grid">
-      <div class="section-marker"><span>01</span><p class="eyebrow">{copy.problem}</p></div>
-      <div class="prose"><h2 class="section-title">{copy.problem}</h2><p>{data.problem[locale]}</p></div>
-    </div>
-  </section>
-
-  <section class="section-pad demo-section">
-    <div class="page-shell">
-      <div class="section-marker horizontal"><span>02</span><p class="eyebrow">{copy.demo}</p></div>
-      <YouTubeFacade youtubeId={data.youtubeId} title={title} locale={locale} />
-    </div>
-  </section>
-
-  <section class="section-pad rule">
-    <div class="page-shell content-grid">
-      <div class="section-marker"><span>03</span><p class="eyebrow">{copy.architecture}</p></div>
-      <div>
-        <h2 class="section-title">{copy.architecture}</h2>
-        <p class="architecture-intro">{copy.architectureIntro}</p>
-        <ol class="architecture-flow">
-          {data.architecture.map((step, index) => <li><span>{String(index + 1).padStart(2, '0')}</span><strong>{step[locale]}</strong><small>PROCESS_NODE</small></li>)}
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <section class="section-pad technology-section">
-    <div class="page-shell technology-grid">
-      <div>
-        <div class="section-marker horizontal"><span>04</span><p class="eyebrow">{copy.technologies}</p></div>
-        <h2 class="section-title">{copy.technologies}</h2>
-        <div class="technology-list">{data.technologies.map((technology, index) => <div><span>T—{String(index + 1).padStart(2, '0')}</span><strong>{technology}</strong></div>)}</div>
-      </div>
-      <aside class="project-links blueprint-card">
-        <p class="eyebrow">{copy.projectLinks}</p>
-        {data.repositoryUrl ? <a href={data.repositoryUrl}>{copy.repository}<span>↗</span></a> : <span>{copy.repository}<small>OFFLINE</small></span>}
-        {data.demoUrl ? <a href={data.demoUrl}>{copy.liveDemo}<span>↗</span></a> : <span>{copy.liveDemo}<small>OFFLINE</small></span>}
-        <p>{copy.unavailable}</p>
+      <aside class="section-marker">
+        <span>01</span>
+        <p class="eyebrow">{copy.narrative}</p>
       </aside>
+      <article class="case-study">
+        <Content />
+      </article>
     </div>
   </section>
 
-  <section class="section-pad results-section">
-    <div class="page-shell">
-      <div class="results-head"><div class="section-marker horizontal"><span>05</span><p class="eyebrow">{copy.results}</p></div><p>{copy.resultNote}</p></div>
-      <div class="results-grid">
-        {data.results.map((result) => <div><strong>{result.value}</strong><span>{result.label[locale]}</span></div>)}
-      </div>
+  <footer class="project-footer-section">
+    <div class="page-shell project-actions">
+      {hasProjectLinks && (
+        <div class="project-links" aria-label={copy.projectLinks}>
+          <p class="eyebrow">{copy.projectLinks}</p>
+          <div>
+            {data.repositoryUrl && <a href={data.repositoryUrl}>{copy.repository}<span aria-hidden="true">↗</span></a>}
+            {data.demoUrl && <a href={data.demoUrl}>{copy.liveDemo}<span aria-hidden="true">↗</span></a>}
+          </div>
+        </div>
+      )}
       <a class="back-link bottom" href={localePath(locale, '/projects')}><span aria-hidden="true">←</span>{ui[locale].backToProjects}</a>
     </div>
-  </section>
+  </footer>
 </BaseLayout>
 
 <style>
   .project-hero { padding-block: 2.5rem clamp(4rem, 7vw, 6.5rem); }
   .back-link { display: inline-flex; align-items: center; gap: 0.7rem; color: var(--color-forest); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
   .back-link:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
-  .project-kicker { display: flex; gap: 1.4rem; margin-top: clamp(3rem, 5vw, 4.5rem); color: var(--color-muted); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .project-kicker { display: flex; flex-wrap: wrap; gap: 1.4rem; margin-top: clamp(3rem, 5vw, 4.5rem); color: var(--color-muted); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
   .project-hero h1 { max-width: 14ch; margin-top: 1.5rem; }
   .hero-details { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; margin-top: 2.5rem; }
   .hero-details .lede { margin: 0; }
   .tags { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.4rem; }
-  .content-grid { display: grid; grid-template-columns: minmax(10rem, 0.4fr) 1fr; gap: clamp(3rem, 9vw, 9rem); }
+  .project-cover { aspect-ratio: 3 / 2; margin: clamp(2.5rem, 5vw, 4.5rem) 0 0; overflow: hidden; }
+  .project-cover :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .content-grid { display: grid; grid-template-columns: minmax(10rem, 0.35fr) minmax(0, 1fr); gap: clamp(3rem, 9vw, 9rem); }
   .section-marker span { display: block; margin-bottom: 1rem; color: var(--color-signal); font-family: var(--font-serif); font-size: 2rem; }
-  .section-marker.horizontal { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
-  .section-marker.horizontal span { margin: 0; }
-  .prose p,
-  .architecture-intro { max-width: 48rem; margin: 1.5rem 0 0; color: var(--color-muted); font-size: 1rem; line-height: 1.8; }
-  .demo-section { background: color-mix(in srgb, var(--color-paper-deep) 50%, transparent); }
-  .architecture-flow { margin: 2.2rem 0 0; padding: 0; border-top: 1px solid var(--color-line); list-style: none; }
-  .architecture-flow li { position: relative; display: grid; grid-template-columns: 4rem 1fr auto; align-items: center; gap: 1rem; min-height: 5rem; border-bottom: 1px solid var(--color-line); }
-  .architecture-flow li::before { position: absolute; top: -1px; left: 1.85rem; width: 0.4rem; height: 0.4rem; border-radius: 50%; background: var(--color-signal); content: ""; }
-  .architecture-flow li > span { color: var(--color-muted); font-size: 0.62rem; font-weight: 700; }
-  .architecture-flow strong { color: var(--color-forest); font-family: var(--font-serif); font-size: 1.2rem; font-weight: 520; }
-  .architecture-flow small { color: var(--color-muted); font-size: 0.55rem; font-weight: 700; letter-spacing: 0.08em; }
-  .technology-section { background: var(--color-forest); color: var(--color-paper); }
-  .technology-grid { display: grid; grid-template-columns: 1fr minmax(18rem, 0.55fr); gap: clamp(3rem, 9vw, 9rem); }
-  .technology-section .eyebrow { color: rgba(244, 240, 231, 0.7); }
-  .technology-list { margin-top: 3rem; border-top: 1px solid rgba(244, 240, 231, 0.2); }
-  .technology-list div { display: grid; grid-template-columns: 5rem 1fr; padding-block: 1.2rem; border-bottom: 1px solid rgba(244, 240, 231, 0.2); }
-  .technology-list span { color: rgba(244, 240, 231, 0.5); font-size: 0.6rem; }
-  .technology-list strong { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 500; }
-  .project-links { align-self: end; padding: 2rem; border-color: rgba(244, 240, 231, 0.25); background: rgba(244, 240, 231, 0.04); }
-  .project-links > a,
-  .project-links > span { display: flex; justify-content: space-between; padding-block: 1rem; border-bottom: 1px solid rgba(244, 240, 231, 0.2); color: var(--color-paper); font-size: 0.72rem; font-weight: 700; text-decoration: none; text-transform: uppercase; }
-  .project-links > span { color: rgba(244, 240, 231, 0.48); }
-  .project-links small { font-size: 0.55rem; }
-  .project-links > p:last-child { margin: 2rem 0 0; color: rgba(244, 240, 231, 0.5); font-size: 0.68rem; line-height: 1.6; }
-  .results-section { background: color-mix(in srgb, var(--color-paper-deep) 55%, transparent); }
-  .results-head { display: flex; align-items: start; justify-content: space-between; gap: 2rem; }
-  .results-head > p { max-width: 22rem; margin: 0; color: var(--color-muted); font-size: 0.68rem; line-height: 1.6; text-align: right; }
-  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 2rem; border-block: 1px solid var(--color-line); }
-  .results-grid div { min-height: 10rem; padding: 1.5rem; border-right: 1px solid var(--color-line); }
-  .results-grid div:last-child { border-right: 0; }
-  .results-grid strong,
-  .results-grid span { display: block; }
-  .results-grid strong { color: var(--color-forest); font-family: var(--font-serif); font-size: clamp(3rem, 6vw, 5.5rem); font-weight: 450; letter-spacing: -0.05em; }
-  .results-grid span { margin-top: 1rem; color: var(--color-muted); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
-  .back-link.bottom { margin-top: 3rem; }
+  .case-study { min-width: 0; max-width: 48rem; }
+  .case-study :global(h2),
+  .case-study :global(h3) { color: var(--color-forest); font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.035em; line-height: 1.08; }
+  .case-study :global(h2) { margin: 3.8rem 0 1.25rem; font-size: clamp(2rem, 3.3vw, 3.2rem); }
+  .case-study :global(h2:first-child) { margin-top: 0; }
+  .case-study :global(h3) { margin: 2.5rem 0 1rem; font-size: clamp(1.45rem, 2vw, 1.9rem); }
+  .case-study :global(p),
+  .case-study :global(li) { color: var(--color-muted); font-size: 1rem; line-height: 1.85; }
+  .case-study :global(p) { margin: 0 0 1.4rem; }
+  .case-study :global(ul),
+  .case-study :global(ol) { margin: 0 0 1.8rem; padding-left: 1.35rem; }
+  .case-study :global(li + li) { margin-top: 0.55rem; }
+  .case-study :global(a) { color: var(--color-forest); text-decoration-color: var(--color-signal); text-underline-offset: 0.2em; }
+  .case-study :global(blockquote) { margin: 2rem 0; padding: 0.3rem 0 0.3rem 1.3rem; border-left: 2px solid var(--color-signal); }
+  .case-study :global(blockquote p) { color: var(--color-forest); font-family: var(--font-serif); font-size: 1.2rem; }
+  .case-study :global(img) { display: block; width: 100%; height: auto; margin-block: 2.5rem; border: 1px solid var(--color-line); }
+  .case-study :global(pre) { max-width: 100%; margin: 2rem 0; padding: 1.25rem; overflow-x: auto; border: 1px solid color-mix(in srgb, var(--color-forest-light) 60%, black); font-size: 0.86rem; line-height: 1.7; tab-size: 2; }
+  .case-study :global(:not(pre) > code) { padding: 0.12em 0.38em; background: var(--color-paper-deep); color: var(--color-forest); font-size: 0.9em; }
+  .case-study :global(.katex-display) { max-width: 100%; margin: 2rem 0; padding: 1rem 0; overflow-x: auto; overflow-y: hidden; }
+  .case-study :global(hr) { margin: 3rem 0; border: 0; border-top: 1px solid var(--color-line); }
+  .project-footer-section { padding-block: 3rem; border-top: 1px solid var(--color-line); background: color-mix(in srgb, var(--color-paper-deep) 55%, transparent); }
+  .project-actions { display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+  .project-links .eyebrow { margin: 0 0 1rem; }
+  .project-links > div { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .project-links a { display: inline-flex; align-items: center; gap: 0.8rem; min-height: 2.7rem; padding: 0.7rem 0.9rem; border: 1px solid var(--color-forest); color: var(--color-forest); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
+  .project-links a:hover { background: var(--color-forest); color: var(--color-paper); }
   @media (max-width: 760px) {
     .hero-details,
-    .content-grid,
-    .technology-grid { grid-template-columns: 1fr; }
+    .content-grid { grid-template-columns: 1fr; }
     .tags { justify-content: flex-start; }
-    .architecture-flow li { grid-template-columns: 2.5rem 1fr; padding-block: 1rem; }
-    .architecture-flow small { grid-column: 2; }
-    .results-grid { grid-template-columns: 1fr; }
-    .results-grid div { min-height: auto; border-right: 0; border-bottom: 1px solid var(--color-line); }
-    .results-grid div:last-child { border-bottom: 0; }
-    .results-head { display: block; }
-    .results-head > p { text-align: left; }
+    .content-grid { gap: 2rem; }
+    .project-actions { align-items: start; flex-direction: column; }
   }
 </style>

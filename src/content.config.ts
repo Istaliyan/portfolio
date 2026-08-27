@@ -9,25 +9,21 @@ const localizedText = z.object({
 
 const projects = defineCollection({
   loader: glob({ pattern: '**/*.json', base: './src/content/projects' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: localizedText,
     summary: localizedText,
-    problem: localizedText,
     year: z.number(),
     featured: z.boolean().default(false),
     tags: z.array(z.string()),
-    technologies: z.array(z.string()),
-    architecture: z.array(localizedText),
-    results: z.array(
-      z.object({
-        value: z.string(),
-        label: localizedText,
-      }),
-    ),
+    cover: image(),
+    coverAlt: localizedText,
     repositoryUrl: z.url().optional(),
     demoUrl: z.url().optional(),
-    youtubeId: z.string().optional(),
   }),
 });
 
-export const collections = { projects };
+const caseStudies = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/case-studies' }),
+});
+
+export const collections = { projects, caseStudies };
