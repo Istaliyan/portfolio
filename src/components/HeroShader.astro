@@ -223,10 +223,10 @@
     }
   `;
 
-  const qualityTiers = [
+const qualityTiers = [
     { columns: 5000, rows: 2500, desktopScale: 0.8, mobileScale: 0.6 },
-    // { columns: 224, rows: 168, desktopScale: 0.65, mobileScale: 0.5 },
-    // { columns: 192, rows: 144, desktopScale: 0.5, mobileScale: 0.4 },
+    { columns: 2500, rows: 1250, desktopScale: 0.7, mobileScale: 0.5 },
+    { columns: 1250, rows: 625, desktopScale: 0.6, mobileScale: 0.4 },
   ] as const;
   const chunkResolution = 49;
   const chunkVertexCount = chunkResolution * chunkResolution;
