@@ -1,0 +1,60 @@
+---
+import type { EChartsOption } from 'echarts';
+
+interface Props {
+  option: EChartsOption;
+  ariaLabel: string;
+  height?: string;
+}
+
+const { option, ariaLabel, height = '24rem' } = Astro.props;
+const serializedOption = JSON.stringify(option);
+---
+
+<portfolio-echart
+  data-option={serializedOption}
+  role="img"
+  aria-label={ariaLabel}
+  style={`--echart-height: ${height}`}
+></portfolio-echart>
+
+<script>
+  import * as echarts from 'echarts';
+  import type { ECharts } from 'echarts';
+
+  class PortfolioEChart extends HTMLElement {
+    private chart?: ECharts;
+    private resizeObserver?: ResizeObserver;
+
+    connectedCallback() {
+      if (this.chart || !this.dataset.option) return;
+
+      this.chart = echarts.init(this);
+      this.chart.setOption(JSON.parse(this.dataset.option));
+
+      this.resizeObserver = new ResizeObserver(() => this.chart?.resize());
+      this.resizeObserver.observe(this);
+    }
+
+    disconnectedCallback() {
+      this.resizeObserver?.disconnect();
+      this.chart?.dispose();
+      this.resizeObserver = undefined;
+      this.chart = undefined;
+    }
+  }
+
+  if (!customElements.get('portfolio-echart')) {
+    customElements.define('portfolio-echart', PortfolioEChart);
+  }
+</script>
+
+<style>
+  portfolio-echart {
+    display: block;
+    width: 100%;
+    height: var(--echart-height);
+    margin-block: 2.5rem;
+    background: var(--color-paper);
+  }
+</style>

@@ -24,7 +24,7 @@ The configured local base path is `/portfolio/`.
 Each project has two content sources:
 
 - `src/content/projects/<project-id>.json` contains shared metadata used by cards, filters, page titles, cover images, and optional project links.
-- `src/content/case-studies/<project-id>/es.md` and `en.md` contain the localized long-form case study. Both files are required for the build.
+- `src/content/case-studies/<project-id>/es.mdx` and `en.mdx` contain the localized long-form case study. Both files are required for the build.
 
 Store cover images in `src/assets/projects/` and reference them from JSON with a path relative to the JSON file. A cover and localized alternative text are required.
 
@@ -45,6 +45,26 @@ score = model.evaluate(features, labels)
 ````
 
 Use descriptive alternative text for every meaningful image. Keep the first heading in a case study at level two because the page title is already the level-one heading.
+
+### ECharts
+
+Import `EChart` in an MDX case study to add an interactive chart:
+
+```mdx
+import EChart from '../../../components/EChart.astro';
+
+<EChart
+  ariaLabel="Validation score comparison"
+  height="24rem"
+  option={{
+    xAxis: { type: 'category', data: ['Baseline', 'CNN', 'Transformer'] },
+    yAxis: { type: 'value' },
+    series: [{ type: 'bar', data: [0.72, 0.84, 0.89] }]
+  }}
+/>
+```
+
+`ariaLabel` must describe the chart in the case study's language. `height` is optional and defaults to `24rem`. Chart options must be JSON-serializable; function-valued formatters and callbacks are not supported.
 
 ## Commands
 

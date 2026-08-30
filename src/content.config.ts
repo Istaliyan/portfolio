@@ -23,7 +23,7 @@ const projects = defineCollection({
 });
 
 const caseStudies = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/case-studies' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/case-studies' }),
 });
 
 export const collections = { projects, caseStudies };

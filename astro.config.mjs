@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import { unified } from '@astrojs/markdown-remark';
 import rehypeKatex from 'rehype-katex';
 import remarkMath from 'remark-math';
@@ -22,6 +23,7 @@ export default defineConfig({
       rehypePlugins: [rehypeKatex],
     }),
   },
+  integrations: [mdx()],
   vite: {
     plugins: [tailwindcss()],
   },
