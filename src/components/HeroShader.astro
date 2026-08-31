@@ -228,7 +228,7 @@ const qualityTiers = [
     { columns: 2500, rows: 1250, desktopScale: 0.7, mobileScale: 0.5 },
     { columns: 1250, rows: 625, desktopScale: 0.6, mobileScale: 0.4 },
   ] as const;
-  const chunkResolution = 49;
+  const chunkResolution = 193;
   const chunkVertexCount = chunkResolution * chunkResolution;
   const chunkIndexCount = (chunkResolution - 1) * (chunkResolution - 1) * 6;
   const terrainMinX = -9;
@@ -415,6 +415,8 @@ const qualityTiers = [
     let cellDepth = 1;
     let chunkWidth = 1;
     let chunkDepth = 1;
+    let lastChunkSyncX = Number.NaN;
+    let lastChunkSyncZ = Number.NaN;
     let qualityIndex = 0;
     let isIntersecting = true;
     let frameRequest = 0;
@@ -454,12 +456,18 @@ const qualityTiers = [
       document.body.append(debugPanel);
     }
 
+    const invalidateChunkSync = () => {
+      lastChunkSyncX = Number.NaN;
+      lastChunkSyncZ = Number.NaN;
+    };
+
     const updateGridMetrics = () => {
       const tier = qualityTiers[qualityIndex];
       cellWidth = 20 / (tier.columns - 1);
       cellDepth = 16 / (tier.rows - 1);
       chunkWidth = cellWidth * (chunkResolution - 1);
       chunkDepth = cellDepth * (chunkResolution - 1);
+      invalidateChunkSync();
     };
     updateGridMetrics();
 
@@ -561,10 +569,25 @@ const qualityTiers = [
     const cameraForwardX = (0.5 - cameraX) / cameraForwardLength;
     const cameraForwardZ = (-0.35 - cameraZ) / cameraForwardLength;
     const syncChunks = (travelX: number, travelZ: number) => {
-      const minChunkX = Math.floor((terrainMinX + travelX) / chunkWidth);
-      const maxChunkX = Math.floor((terrainMaxX + travelX) / chunkWidth);
-      const minChunkZ = Math.floor((terrainMinZ + travelZ) / chunkDepth);
-      const maxChunkZ = Math.floor((terrainMaxZ + travelZ) / chunkDepth);
+      const syncPadding = Math.min(chunkWidth, chunkDepth) / 8;
+      if (
+        Number.isFinite(lastChunkSyncX)
+        && Math.hypot(travelX - lastChunkSyncX, travelZ - lastChunkSyncZ)
+          < syncPadding
+      ) return;
+
+      const minChunkX = Math.floor(
+        (terrainMinX + travelX - syncPadding) / chunkWidth,
+      );
+      const maxChunkX = Math.floor(
+        (terrainMaxX + travelX + syncPadding) / chunkWidth,
+      );
+      const minChunkZ = Math.floor(
+        (terrainMinZ + travelZ - syncPadding) / chunkDepth,
+      );
+      const maxChunkZ = Math.floor(
+        (terrainMaxZ + travelZ + syncPadding) / chunkDepth,
+      );
       const desiredChunks = new Map<string, [number, number]>();
 
       for (let chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ += 1) {
@@ -583,8 +606,11 @@ const qualityTiers = [
           const furthestForwardZ = cameraForwardZ < 0 ? worldMinZ : worldMaxZ;
           const furthestForward = (furthestForwardX - cameraX) * cameraForwardX
                                 + (furthestForwardZ - cameraZ) * cameraForwardZ;
-          if (Math.hypot(distanceX, distanceZ) > terrainCullDistance) continue;
-          if (furthestForward < -2) continue;
+          if (
+            Math.hypot(distanceX, distanceZ)
+              > terrainCullDistance + syncPadding
+          ) continue;
+          if (furthestForward < -2 - syncPadding) continue;
           desiredChunks.set(`${chunkX}:${chunkZ}`, [chunkX, chunkZ]);
         }
       }
@@ -602,6 +628,8 @@ const qualityTiers = [
         generateChunk(chunk, chunkX, chunkZ);
         activeChunks.set(key, chunk);
       }
+      lastChunkSyncX = travelX;
+      lastChunkSyncZ = travelZ;
     };
 
     gl.clearColor(0.957, 0.941, 0.902, 1);
