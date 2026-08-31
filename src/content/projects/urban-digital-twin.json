@@ -1,7 +1,7 @@
 {
   "title": { "es": "Visor urbano 3D", "en": "3D urban viewer" },
   "summary": { "es": "Experiencia Web GIS para explorar datos urbanos 3D, capas analíticas y escenarios desde el navegador.", "en": "A Web GIS experience for exploring 3D urban data, analytical layers, and scenarios in the browser." },
-  "year": 2026,
+  "date": "2026-08-25",
   "featured": false,
   "tags": ["Cesium", "Web GIS", "3D Tiles"],
   "cover": "../../assets/projects/urban-digital-twin.png",

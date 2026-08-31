@@ -26,7 +26,7 @@ const copy = locale === 'es' ? {
       <div><p class="lede">{copy.intro}</p><p class="note">{copy.note}</p></div>
     </div>
   </header>
-  <section class="page-shell projects-section">
+  <section id="projects" class="page-shell projects-section">
     <ProjectGrid projects={projects} locale={locale} filterable />
   </section>
 </BaseLayout>

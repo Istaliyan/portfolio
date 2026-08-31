@@ -1,7 +1,7 @@
 {
   "title": { "es": "Clasificación de cobertura GeoAI", "en": "GeoAI land-cover classification" },
   "summary": { "es": "Sistema de ML espacial para clasificar cobertura del suelo con trazabilidad desde el dato hasta la inferencia.", "en": "A spatial ML system for land-cover classification with traceability from data to inference." },
-  "year": 2026,
+  "date": "2026-08-18",
   "featured": true,
   "tags": ["GeoAI", "Machine Learning", "MLOps"],
   "cover": "../../assets/projects/land-cover-model.png",

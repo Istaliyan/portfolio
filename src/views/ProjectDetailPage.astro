@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { getEntry, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { localePath, ui, type Locale } from '../lib/site';
+import { localePath, projectsTagPath, ui, type Locale } from '../lib/site';
 
 interface Props {
   locale: Locale;
@@ -13,6 +13,12 @@ const { locale, project } = Astro.props;
 const data = project.data;
 const title = data.title[locale];
 const summary = data.summary[locale];
+const formattedDate = new Intl.DateTimeFormat(locale === 'es' ? 'es-ES' : 'en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+}).format(new Date(`${data.date}T00:00:00Z`));
 const caseStudy = await getEntry('caseStudies', `${project.id}/${locale}`);
 
 if (!caseStudy) {
@@ -23,13 +29,11 @@ const { Content, headings } = await render(caseStudy);
 const sections = headings.filter(({ depth }) => depth === 2);
 const hasProjectLinks = Boolean(data.repositoryUrl || data.demoUrl);
 const copy = locale === 'es' ? {
-  caseStudy: 'Caso de estudio',
   index: 'Índice',
   projectLinks: 'Enlaces del proyecto',
   repository: 'Repositorio',
   liveDemo: 'Demo en vivo',
 } : {
-  caseStudy: 'Case study',
   index: 'Contents',
   projectLinks: 'Project links',
   repository: 'Repository',
@@ -40,15 +44,21 @@ const copy = locale === 'es' ? {
 <BaseLayout locale={locale} title={title} description={summary}>
   <header class="page-shell project-hero">
     <a class="back-link" href={localePath(locale, '/projects')}><span aria-hidden="true">←</span>{ui[locale].backToProjects}</a>
-    <div class="project-kicker"><span>{copy.caseStudy}</span><span>{data.year}</span><span>P / {project.id.toUpperCase().slice(0, 12)}</span></div>
-    <h1 class="display-title">{title}</h1>
-    <div class="hero-details">
-      <p class="lede">{summary}</p>
-      <div class="tags">{data.tags.map((tag) => <span class="tag">{tag}</span>)}</div>
+    <div class="project-hero-grid">
+      <div class="project-heading">
+        <time class="project-date" datetime={data.date}>{formattedDate}</time>
+        <h1 class="display-title">{title}</h1>
+        <div class="hero-details">
+          <p class="lede">{summary}</p>
+          <div class="tags" aria-label={locale === 'es' ? 'Etiquetas' : 'Tags'}>
+            {data.tags.map((tag) => <a class="tag" href={projectsTagPath(locale, tag)}>{tag}</a>)}
+          </div>
+        </div>
+      </div>
+      <figure class="project-cover blueprint-card">
+        <Image src={data.cover} alt={data.coverAlt[locale]} layout="full-width" priority />
+      </figure>
     </div>
-    <figure class="project-cover blueprint-card">
-      <Image src={data.cover} alt={data.coverAlt[locale]} layout="full-width" priority />
-    </figure>
   </header>
 
   <section class="section-pad rule">
@@ -89,12 +99,15 @@ const copy = locale === 'es' ? {
   .project-hero { padding-block: 2.5rem clamp(4rem, 7vw, 6.5rem); }
   .back-link { display: inline-flex; align-items: center; gap: 0.7rem; color: var(--color-forest); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
   .back-link:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
-  .project-kicker { display: flex; flex-wrap: wrap; gap: 1.4rem; margin-top: clamp(3rem, 5vw, 4.5rem); color: var(--color-muted); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-  .project-hero h1 { max-width: 14ch; margin-top: 1.5rem; }
-  .hero-details { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 2rem; margin-top: 2.5rem; }
-  .hero-details .lede { margin: 0; }
-  .tags { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.4rem; }
-  .project-cover { aspect-ratio: 3 / 2; margin: clamp(2.5rem, 5vw, 4.5rem) 0 0; overflow: hidden; }
+  .project-hero-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(22rem, 1.1fr); align-items: center; gap: clamp(2.5rem, 5vw, 5rem); margin-top: clamp(3rem, 5vw, 4.5rem); }
+  .project-date { display: block; color: var(--color-muted); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .project-heading h1 { max-width: 11ch; margin-top: 1.5rem; }
+  .hero-details { margin-top: 2.5rem; }
+  .hero-details .lede { max-width: 30rem; margin: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.5rem; }
+  .tags .tag { text-decoration: none; transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease; }
+  .tags .tag:hover { border-color: var(--color-forest); background: var(--color-forest); color: var(--color-paper); }
+  .project-cover { width: 100%; aspect-ratio: 3 / 2; margin: 0; overflow: hidden; }
   .project-cover :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .content-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 48rem) minmax(0, 1fr); }
   .section-index { position: sticky; top: 2rem; grid-column: 3; grid-row: 1; align-self: start; padding-left: clamp(1.5rem, 3vw, 3rem); }
@@ -141,8 +154,8 @@ const copy = locale === 'es' ? {
     .case-study { grid-column: 1; grid-row: 2; }
   }
   @media (max-width: 760px) {
-    .hero-details { grid-template-columns: 1fr; }
-    .tags { justify-content: flex-start; }
+    .project-hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .project-cover { width: min(100%, 32rem); }
     .project-actions { align-items: start; flex-direction: column; }
   }
 </style>

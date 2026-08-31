@@ -1,7 +1,7 @@
 {
   "title": { "es": "Estructura forestal con LiDAR", "en": "Forest structure from LiDAR" },
   "summary": { "es": "Procesamiento de nubes de puntos para estimar métricas de vegetación y generar productos listos para análisis.", "en": "Point-cloud processing to estimate vegetation metrics and generate analysis-ready products." },
-  "year": 2026,
+  "date": "2026-08-11",
   "featured": true,
   "tags": ["LiDAR", "Point Clouds", "PDAL"],
   "cover": "../../assets/projects/forest-structure.png",

@@ -49,6 +49,10 @@ export function localePath(locale: Locale, path = '/'): string {
   return withBase(locale === 'en' ? `/en${cleanPath}/` : `${cleanPath}/`);
 }
 
+export function projectsTagPath(locale: Locale, tag: string): string {
+  return `${localePath(locale, '/projects')}?tag=${encodeURIComponent(tag)}#projects`;
+}
+
 export function alternateLocalePath(locale: Locale, pathname: string): string {
   const route = stripBase(pathname).replace(/\/$/, '') || '/';
   if (locale === 'en') {

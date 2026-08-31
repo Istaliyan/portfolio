@@ -1,7 +1,7 @@
 {
   "title": { "es": "Detección de cambios costeros", "en": "Coastal change detection" },
   "summary": { "es": "Pipeline reproducible para identificar cambios en la línea de costa a partir de series temporales multiespectrales.", "en": "A reproducible pipeline for identifying coastline shifts from multispectral time series." },
-  "year": 2026,
+  "date": "2026-08-04",
   "featured": true,
   "tags": ["Sentinel-2", "Remote Sensing", "Python"],
   "cover": "../../assets/projects/coastal-change.png",

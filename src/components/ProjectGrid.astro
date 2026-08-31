@@ -36,20 +36,39 @@ const tags = [...new Set(projects.flatMap((project) => project.data.tags))].sort
       const cards = section.querySelectorAll<HTMLElement>('[data-project-card]');
       const count = section.querySelector<HTMLElement>('[data-visible-count]');
 
+      const applyFilter = (requested: string, updateUrl = false) => {
+        const activeButton = Array.from(buttons).find((button) => (
+          button.dataset.filter?.toLocaleLowerCase() === requested.toLocaleLowerCase()
+        )) ?? buttons[0];
+        const selected = activeButton?.dataset.filter ?? 'all';
+        let visible = 0;
+
+        buttons.forEach((button) => (
+          button.setAttribute('aria-pressed', String(button === activeButton))
+        ));
+        cards.forEach((card) => {
+          const tags = JSON.parse(card.dataset.tags ?? '[]') as string[];
+          const show = selected === 'all' || tags.includes(selected);
+          card.hidden = !show;
+          if (show) visible += 1;
+        });
+
+        if (count) count.textContent = String(visible);
+        if (updateUrl) {
+          const url = new URL(window.location.href);
+          if (selected === 'all') url.searchParams.delete('tag');
+          else url.searchParams.set('tag', selected);
+          url.hash = 'projects';
+          window.history.replaceState(null, '', url);
+        }
+      };
+
+      const requestedTag = new URLSearchParams(window.location.search).get('tag') ?? 'all';
+      applyFilter(requestedTag);
+
       buttons.forEach((button) => {
         button.addEventListener('click', () => {
-          const selected = button.dataset.filter ?? 'all';
-          let visible = 0;
-
-          buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
-          cards.forEach((card) => {
-            const tags = JSON.parse(card.dataset.tags ?? '[]') as string[];
-            const show = selected === 'all' || tags.includes(selected);
-            card.hidden = !show;
-            if (show) visible += 1;
-          });
-
-          if (count) count.textContent = String(visible);
+          applyFilter(button.dataset.filter ?? 'all', true);
         });
       });
     });
