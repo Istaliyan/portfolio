@@ -1,0 +1,216 @@
+---
+import type { EChartsOption } from 'echarts';
+import type { Locale } from '../lib/site';
+import EChart from './EChart.astro';
+
+interface Props {
+  ariaLabel: string;
+  locale: Locale;
+  rootLabel: string;
+}
+
+const { ariaLabel, locale, rootLabel } = Astro.props;
+const renderTimeLabel = locale === 'es' ? 'El gráfico se ha generado en' : 'Chart has been generated in';
+
+const interestGroupLabels = [
+  {
+    name: { es: 'Humanidades', en: 'Humanities' },
+    color: '#153d30',
+    topics: [
+      { es: 'Estudios clásicos', en: 'Classics' },
+      { es: 'Historia', en: 'History' },
+      { es: 'Estudios culturales', en: 'Cultural Studies' },
+      { es: 'Estudios religiosos', en: 'Religious Studies' },
+      { es: 'Mitología', en: 'Mythology' },
+      { es: 'Folclore', en: 'Folklore' },
+      { es: 'Historia intelectual', en: 'Intellectual History' },
+      { es: 'Historia de las ideas', en: 'History of Ideas' },
+      { es: 'Humanidades digitales', en: 'Digital Humanities' },
+    ],
+  },
+  {
+    name: { es: 'Literatura y lenguaje', en: 'Literature & Language' },
+    color: '#bd6b43',
+    topics: [
+      { es: 'Teoría literaria', en: 'Literary Theory' },
+      { es: 'Literatura comparada', en: 'Comparative Literature' },
+      { es: 'Poesía', en: 'Poetry' },
+      { es: 'Drama', en: 'Drama' },
+      { es: 'Teoría narrativa', en: 'Narrative Theory' },
+      { es: 'Narratología', en: 'Narratology' },
+      { es: 'Retórica', en: 'Rhetoric' },
+      { es: 'Estilística', en: 'Stylistics' },
+      { es: 'Filología', en: 'Philology' },
+      { es: 'Lingüística', en: 'Linguistics' },
+      { es: 'Semiótica', en: 'Semiotics' },
+      { es: 'Hermenéutica', en: 'Hermeneutics' },
+      { es: 'Estudios de traducción', en: 'Translation Studies' },
+      { es: 'Escritura creativa', en: 'Creative Writing' },
+    ],
+  },
+  {
+    name: { es: 'Filosofía', en: 'Philosophy' },
+    color: '#315f68',
+    topics: [
+      { es: 'Metafísica', en: 'Metaphysics' },
+      { es: 'Epistemología', en: 'Epistemology' },
+      { es: 'Ética', en: 'Ethics' },
+      { es: 'Lógica', en: 'Logic' },
+      { es: 'Filosofía de la mente', en: 'Philosophy of Mind' },
+      { es: 'Filosofía del lenguaje', en: 'Philosophy of Language' },
+      { es: 'Filosofía política', en: 'Political Philosophy' },
+      { es: 'Filosofía social', en: 'Social Philosophy' },
+      { es: 'Filosofía de la cultura', en: 'Philosophy of Culture' },
+      { es: 'Filosofía de la religión', en: 'Philosophy of Religion' },
+      { es: 'Filosofía de la historia', en: 'Philosophy of History' },
+      { es: 'Fenomenología', en: 'Phenomenology' },
+      { es: 'Existencialismo', en: 'Existentialism' },
+      { es: 'Estructuralismo', en: 'Structuralism' },
+      { es: 'Posestructuralismo', en: 'Post-structuralism' },
+    ],
+  },
+  {
+    name: { es: 'Estética', en: 'Aesthetics' },
+    color: '#8c7a4c',
+    topics: [
+      { es: 'Filosofía del arte', en: 'Philosophy of Art' },
+      { es: 'Filosofía de la belleza', en: 'Philosophy of Beauty' },
+      { es: 'Filosofía del gusto', en: 'Philosophy of Taste' },
+      { es: 'Lo sublime', en: 'Sublime' },
+      { es: 'Representación', en: 'Representation' },
+      { es: 'Mímesis', en: 'Mimesis' },
+      { es: 'Expresión', en: 'Expression' },
+      { es: 'Interpretación', en: 'Interpretation' },
+      { es: 'Valor artístico', en: 'Artistic Value' },
+      { es: 'Formalismo', en: 'Formalism' },
+      { es: 'Filosofía de la creatividad', en: 'Philosophy of Creativity' },
+      { es: 'Estética cotidiana', en: 'Everyday Aesthetics' },
+      { es: 'Estética ambiental', en: 'Environmental Aesthetics' },
+    ],
+  },
+] as const;
+
+const interestGroups = interestGroupLabels.map((group) => ({
+  name: group.name[locale],
+  color: group.color,
+  topics: group.topics.map((topic) => topic[locale]),
+}));
+
+const categories = interestGroups.map(({ name, color }) => ({
+  name,
+  itemStyle: { color },
+}));
+
+const nodes = [
+  {
+    id: 'root',
+    name: rootLabel,
+    symbolSize: 42,
+    itemStyle: { color: '#17231d', borderColor: '#f4f0e7', borderWidth: 2 },
+    label: { show: true, color: '#17231d', fontSize: 13, fontWeight: 700 },
+  },
+  ...interestGroups.flatMap((group, category) => [
+    {
+      id: `category-${category}`,
+      name: group.name,
+      category,
+      symbolSize: 26,
+      label: { show: true, fontSize: 11, fontWeight: 700 },
+    },
+    ...group.topics.map((topic, topicIndex) => ({
+      id: `topic-${category}-${topicIndex}`,
+      name: topic,
+      category,
+      symbolSize: 9,
+    })),
+  ]),
+];
+
+const linkCurves = [-0.28, 0.18, -0.14, 0.3, -0.22, 0.12, 0.24];
+
+const links = interestGroups.flatMap((group, category) => [
+  {
+    source: 'root',
+    target: `category-${category}`,
+    lineStyle: { width: 1.5, opacity: 0.55, curveness: category % 2 === 0 ? 0.18 : -0.18 },
+  },
+  ...group.topics.map((_, topicIndex) => ({
+    source: `category-${category}`,
+    target: `topic-${category}-${topicIndex}`,
+    lineStyle: { curveness: linkCurves[(topicIndex + category * 2) % linkCurves.length] },
+  })),
+]);
+
+const option: EChartsOption = {
+  backgroundColor: 'transparent',
+  tooltip: { trigger: 'item' },
+  legend: {
+    top: 14,
+    left: 'center',
+    selectedMode: 'multiple',
+    data: categories.map(({ name }) => name),
+    textStyle: { color: '#667069', fontSize: 11 },
+  },
+  animationDuration: 900,
+  animationDurationUpdate: 900,
+  animationEasingUpdate: 'quinticInOut',
+  series: [
+    {
+      type: 'graph',
+      layout: 'force',
+      top: 58,
+      right: 24,
+      bottom: 24,
+      left: 24,
+      data: nodes,
+      links,
+      categories,
+      roam: true,
+      draggable: true,
+      label: {
+        show: true,
+        position: 'right',
+        distance: 5,
+        color: '#3f4d46',
+        fontSize: 9,
+      },
+      labelLayout: { hideOverlap: true },
+      lineStyle: {
+        color: 'source',
+        width: 0.8,
+        opacity: 0.3,
+        curveness: 0.08,
+      },
+      itemStyle: {
+        borderColor: '#f4f0e7',
+        borderWidth: 1.2,
+      },
+      force: {
+        repulsion: 145,
+        gravity: 0.08,
+        edgeLength: [45, 105],
+        friction: 0.65,
+      },
+      emphasis: {
+        focus: 'adjacency',
+        label: { show: true, color: '#17231d', fontSize: 11 },
+        lineStyle: { width: 2, opacity: 0.8 },
+      },
+    },
+  ],
+};
+---
+
+<div class="interests-graph">
+  <EChart
+    option={option}
+    ariaLabel={ariaLabel}
+    height="clamp(36rem, 62vw, 47rem)"
+    renderTimeLabel={renderTimeLabel}
+  />
+</div>
+
+<style>
+  .interests-graph { padding: clamp(0.25rem, 1vw, 0.75rem); overflow: hidden; }
+  .interests-graph :global(portfolio-echart) { margin: 0; background: transparent; }
+</style>
