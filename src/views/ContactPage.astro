@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site, type Locale } from '../lib/site';
 
@@ -29,8 +30,14 @@ const copy = locale === 'es' ? {
       <a class="button-primary" href={`mailto:${site.email}`}>{copy.emailText}</a>
       <div class="socials">
         <p>{copy.connect}</p>
-        <a href={site.github}>GitHub <span aria-hidden="true">↗</span></a>
-        <a href={site.linkedin}>LinkedIn <span aria-hidden="true">↗</span></a>
+        <a href={site.github}>
+          <Icon class="social-icon" name="brands/github" size="1rem" aria-hidden="true" focusable="false" />
+          <span>GitHub</span>
+        </a>
+        <a href={site.linkedin}>
+          <Icon class="social-icon" name="brands/linkedin" size="1rem" aria-hidden="true" focusable="false" />
+          <span>LinkedIn</span>
+        </a>
       </div>
       <p class="response-note">{copy.note}</p>
     </div>
@@ -50,7 +57,8 @@ const copy = locale === 'es' ? {
   .socials { display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; margin-top: 2.5rem; padding-top: 1.2rem; border-top: 1px solid var(--color-line); }
   .socials p,
   .response-note { margin: 0; color: var(--color-muted); font-size: 0.65rem; }
-  .socials a { color: var(--color-forest); font-size: 0.67rem; font-weight: 700; text-decoration: none; text-transform: uppercase; }
+  .socials a { display: inline-flex; align-items: center; gap: 0.4rem; color: var(--color-forest); font-size: 0.67rem; font-weight: 700; text-decoration: none; text-transform: uppercase; }
+  .socials :global(.social-icon) { flex: none; }
   .response-note { margin-top: 1.8rem; }
   @media (max-width: 760px) {
     .contact-layout { min-height: auto; grid-template-columns: 1fr; }

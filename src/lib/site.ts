@@ -1,14 +1,14 @@
 export type Locale = 'es' | 'en';
 
 export const site = {
-  name: 'Nombre Apellido',
+  name: 'Istaliyan Ivanov Manov',
   role: {
     es: 'ML & Geospatial Engineer',
     en: 'ML & Geospatial Engineer',
   },
-  email: 'hello@example.com',
-  github: 'https://github.com/username',
-  linkedin: 'https://www.linkedin.com/in/username',
+  email: 'istaliyan.ivanov@gmail.com',
+  github: 'https://github.com/Istaliyan',
+  linkedin: 'https://www.linkedin.com/in/istaliyan/',
 };
 
 export const ui = {

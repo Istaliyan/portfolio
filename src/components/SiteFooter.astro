@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { localePath, site, type Locale } from '../lib/site';
 
 interface Props { locale: Locale }
@@ -10,12 +11,22 @@ const year = new Date().getFullYear();
   <div class="page-shell footer-grid">
     <div>
       <p class="footer-title">{site.name}</p>
-      <p>{site.role[locale]} · Madrid, ES</p>
+      <p>{site.role[locale]} · Valladolid, ES</p>
     </div>
     <div class="footer-links">
       <a href={localePath(locale, '/projects')}>{locale === 'es' ? 'Proyectos' : 'Projects'}</a>
-      <a href={site.github}>GitHub</a>
-      <a href={site.linkedin}>LinkedIn</a>
+      <a href={`mailto:${site.email}`}>
+        <Icon class="footer-icon" name="envelope" size="0.95rem" aria-hidden="true" focusable="false" />
+        <span>{locale === 'es' ? 'Correo' : 'Email'}</span>
+      </a>
+      <a href={site.github}>
+        <Icon class="footer-icon" name="brands/github" size="0.95rem" aria-hidden="true" focusable="false" />
+        <span>GitHub</span>
+      </a>
+      <a href={site.linkedin}>
+        <Icon class="footer-icon" name="brands/linkedin" size="0.95rem" aria-hidden="true" focusable="false" />
+        <span>LinkedIn</span>
+      </a>
     </div>
     <p class="footer-meta">© {year} · Astro + GitHub Pages</p>
   </div>
@@ -26,13 +37,13 @@ const year = new Date().getFullYear();
   .footer-grid { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 2rem; }
   p { margin: 0; color: var(--color-muted); font-size: 0.72rem; }
   .footer-title { margin-bottom: 0.4rem; color: var(--color-ink); font-weight: 700; }
-  .footer-links { display: flex; gap: 1.5rem; }
-  .footer-links a { color: var(--color-forest); font-size: 0.7rem; font-weight: 700; text-decoration: none; text-transform: uppercase; }
-  .footer-links a:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
+  .footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .footer-links a { display: inline-flex; min-height: 2.1rem; align-items: center; gap: 0.45rem; padding: 0.5rem 0.7rem; border: 1px solid var(--color-line); color: var(--color-forest); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.05em; line-height: 1; text-decoration: none; text-transform: uppercase; transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease; }
+  .footer-links :global(.footer-icon) { flex: none; }
+  .footer-links a:hover { border-color: var(--color-forest); background: var(--color-forest); color: var(--color-paper); }
   .footer-meta { text-align: right; }
   @media (max-width: 700px) {
     .footer-grid { grid-template-columns: 1fr; align-items: start; }
     .footer-meta { text-align: left; }
-    .footer-links { flex-wrap: wrap; }
   }
 </style>

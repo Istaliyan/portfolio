@@ -15,6 +15,7 @@
     "@fontsource-variable/manrope": "^5.3.0",
     "@fontsource-variable/source-serif-4": "^5.3.0",
     "astro": "^7.2.7",
+    "astro-icon": "^1.2.0",
     "echarts": "^6.1.0",
     "katex": "^0.18.4",
     "rehype-katex": "^7.0.1",

@@ -1,4 +1,5 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { alternateLocalePath, localePath, site, stripBase, ui, type Locale } from '../lib/site';
 
 interface Props {
@@ -34,10 +35,15 @@ const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : rout
       ))}
     </nav>
 
-    <a class="language-link" href={alternateLocalePath(locale, pathname)} hreflang={locale === 'es' ? 'en' : 'es'}>
-      {locale === 'es' ? 'EN' : 'ES'}
-      <span class="sr-only">— {labels.language}</span>
-    </a>
+    <div class="header-actions">
+      <a class="header-icon-link" href={site.github} aria-label="GitHub" title="GitHub">
+        <Icon name="brands/github" size="1.05rem" aria-hidden="true" focusable="false" />
+      </a>
+      <a class="language-link" href={alternateLocalePath(locale, pathname)} hreflang={locale === 'es' ? 'en' : 'es'}>
+        {locale === 'es' ? 'EN' : 'ES'}
+        <span class="sr-only">— {labels.language}</span>
+      </a>
+    </div>
 
     <details class="mobile-menu">
       <summary aria-label={locale === 'es' ? 'Abrir menú' : 'Open menu'}>Menú</summary>
@@ -90,6 +96,7 @@ const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : rout
   .brand small { margin-top: 0.14rem; color: var(--color-muted); font-size: 0.62rem; }
 
   .desktop-nav { display: flex; align-items: center; gap: 2rem; }
+  .header-actions { display: flex; align-items: center; gap: 1rem; }
   .desktop-nav a,
   .language-link {
     position: relative;
@@ -119,6 +126,18 @@ const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : rout
   .desktop-nav a:hover::after,
   .desktop-nav a[aria-current="page"]::after { transform: scaleX(1); }
 
+  .header-icon-link {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 160ms ease, background-color 160ms ease;
+  }
+
+  .header-icon-link:hover { background: var(--color-paper-deep); color: var(--color-forest); }
+
   .language-link {
     padding-left: 1.4rem;
     border-left: 1px solid var(--color-line);
@@ -129,6 +148,7 @@ const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : rout
   @media (max-width: 760px) {
     .header-inner { grid-template-columns: 1fr auto auto; gap: 0.8rem; }
     .desktop-nav { display: none; }
+    .header-actions { gap: 0.65rem; }
     .language-link { padding-left: 0; border-left: 0; }
     .mobile-menu { position: relative; display: block; }
     .mobile-menu summary {
