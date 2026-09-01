@@ -5,18 +5,21 @@ interface Props {
   option: EChartsOption;
   ariaLabel: string;
   height?: string;
+  renderTimeLabel?: string;
 }
 
-const { option, ariaLabel, height = '24rem' } = Astro.props;
+const { option, ariaLabel, height = '24rem', renderTimeLabel } = Astro.props;
 const serializedOption = JSON.stringify(option);
 ---
 
 <portfolio-echart
   data-option={serializedOption}
+  data-render-time-label={renderTimeLabel}
   role="img"
   aria-label={ariaLabel}
   style={`--echart-height: ${height}`}
 ></portfolio-echart>
+{renderTimeLabel && <small class="echart-render-time" data-echart-render-time aria-live="polite"></small>}
 
 <script>
   import * as echarts from 'echarts';
@@ -29,8 +32,16 @@ const serializedOption = JSON.stringify(option);
     connectedCallback() {
       if (this.chart || !this.dataset.option) return;
 
+      const startedAt = performance.now();
       this.chart = echarts.init(this);
       this.chart.setOption(JSON.parse(this.dataset.option));
+
+      if (this.dataset.renderTimeLabel) {
+        const status = this.nextElementSibling;
+        if (status instanceof HTMLElement && status.dataset.echartRenderTime !== undefined) {
+          status.textContent = `${this.dataset.renderTimeLabel} ${(performance.now() - startedAt).toFixed(2)} ms`;
+        }
+      }
 
       this.resizeObserver = new ResizeObserver(() => this.chart?.resize());
       this.resizeObserver.observe(this);
@@ -56,5 +67,14 @@ const serializedOption = JSON.stringify(option);
     height: var(--echart-height);
     margin-block: 2.5rem;
     background: var(--color-paper);
+  }
+
+  .echart-render-time {
+    display: block;
+    margin-top: 0.6rem;
+    color: var(--color-muted);
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-align: right;
   }
 </style>

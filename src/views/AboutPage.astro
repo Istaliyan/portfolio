@@ -1,15 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ThingsILikeGraph from '../components/ThingsILikeGraph.astro';
 import { localePath, type Locale } from '../lib/site';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
 const copy = locale === 'es' ? {
-  title: 'Sobre mí', eyebrow: 'Perfil / 01', heading: 'Pensamiento espacial. Ingeniería práctica.',
+  title: 'Sobre mí',
   intro: 'Soy un perfil técnico especializado en construir sistemas donde el territorio, los datos y el software tienen que entenderse entre sí.',
   storyTitle: 'Más allá del modelo.',
   story: ['Mi trabajo empieza antes del entrenamiento: entender cómo se capturó el dato, qué representa realmente y dónde puede romperse el razonamiento espacial.', 'Después convierto ese conocimiento en pipelines reproducibles, modelos medibles y herramientas que hacen visible el resultado. El objetivo es que una solución no solo funcione una vez, sino que pueda explicarse, mantenerse y evolucionar.'],
-  matrixLabel: 'Capacidades / 02', matrixTitle: 'Matriz de capacidades',
+  interestsLabel: 'Intereses / 02',
+  interestsTitle: 'Cosas que me gustan',
+  interestsBody: 'Una cartografía personal de ideas, disciplinas y tradiciones que exploro. Arrastra, amplía o selecciona un nodo para recorrer sus conexiones.',
+  interestsAria: 'Grafo interactivo de intereses en humanidades, literatura y lenguaje, filosofía y estética',
+  matrixLabel: 'Capacidades / 03', matrixTitle: 'Matriz de capacidades',
   matrixColumns: ['Área', 'Stack principal', 'Herramientas de apoyo', 'Evidencia'],
   capabilities: [
     ['ML / GeoAI', 'Python, PyTorch, scikit-learn', 'MLflow, OpenCV', '3 proyectos'],
@@ -20,19 +25,17 @@ const copy = locale === 'es' ? {
     ['Web / Visualización', 'TypeScript, Astro, WebGL', 'CesiumJS, OpenLayers', '3 proyectos'],
     ['Infraestructura', 'Docker, GitHub Actions', 'AWS, Linux', '5 proyectos'],
   ],
-  methodLabel: 'Método / 03', methodTitle: 'Cómo abordo el trabajo',
-  methods: [
-    { n: '01', title: 'Entender el territorio', body: 'Contexto, escala, sistemas de referencia y límites reales antes de elegir herramientas.' },
-    { n: '02', title: 'Diseñar la evidencia', body: 'Datos, validación espacial y métricas capaces de sostener una decisión técnica.' },
-    { n: '03', title: 'Construir el sistema', body: 'Automatización, observabilidad y una interfaz proporcionada al problema.' },
-  ],
   cta: 'Ver proyectos',
 } : {
-  title: 'About', eyebrow: 'Profile / 01', heading: 'Spatial thinking. Practical engineering.',
+  title: 'About',
   intro: 'I am a technical specialist focused on building systems where territory, data, and software need to understand each other.',
   storyTitle: 'Beyond the model.',
   story: ['My work starts before training: understanding how data was captured, what it truly represents, and where spatial reasoning can break.', 'I then turn that knowledge into reproducible pipelines, measurable models, and tools that make outcomes visible. The goal is not only to make a solution work once, but to make it explainable, maintainable, and able to evolve.'],
-  matrixLabel: 'Capabilities / 02', matrixTitle: 'Capability matrix',
+  interestsLabel: 'Interests / 02',
+  interestsTitle: 'Things I like',
+  interestsBody: 'A personal map of ideas, disciplines, and traditions I explore. Drag, zoom, or select a node to trace its connections.',
+  interestsAria: 'Interactive graph of interests in humanities, literature and language, philosophy, and aesthetics',
+  matrixLabel: 'Capabilities / 03', matrixTitle: 'Capability matrix',
   matrixColumns: ['Area', 'Core stack', 'Supporting tools', 'Evidence'],
   capabilities: [
     ['ML / GeoAI', 'Python, PyTorch, scikit-learn', 'MLflow, OpenCV', '3 projects'],
@@ -43,22 +46,39 @@ const copy = locale === 'es' ? {
     ['Web / Visualization', 'TypeScript, Astro, WebGL', 'CesiumJS, OpenLayers', '3 projects'],
     ['Infrastructure', 'Docker, GitHub Actions', 'AWS, Linux', '5 projects'],
   ],
-  methodLabel: 'Method / 03', methodTitle: 'How I approach the work',
-  methods: [
-    { n: '01', title: 'Understand the territory', body: 'Context, scale, reference systems, and real constraints before choosing tools.' },
-    { n: '02', title: 'Design the evidence', body: 'Data, spatial validation, and metrics capable of supporting a technical decision.' },
-    { n: '03', title: 'Build the system', body: 'Automation, observability, and an interface proportionate to the problem.' },
-  ],
   cta: 'View projects',
 };
 ---
 
 <BaseLayout locale={locale} title={copy.title} description={copy.intro}>
-  <header class="page-shell about-hero">
-    <p class="eyebrow">{copy.eyebrow}</p>
-    <h1 class="display-title">{copy.heading}</h1>
-    <p class="lede">{copy.intro}</p>
-  </header>
+  <section class="section-pad">
+    <div class="page-shell story-grid">
+      <div class="portrait-placeholder blueprint-card" aria-hidden="true">
+        <span>PORTRAIT / PLACEHOLDER</span>
+        <strong>IIM</strong>
+        <small>41.6523° N / 4.7245° W</small>
+      </div>
+      <div class="story-copy">
+        <p class="eyebrow">BIO / A—01</p>
+        <h2 class="section-title">{copy.storyTitle}</h2>
+        <p>{copy.intro}</p>
+        {copy.story.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section-pad rule interests-section">
+    <div class="page-shell">
+      <div class="interests-head">
+        <div>
+          <p class="eyebrow">{copy.interestsLabel}</p>
+          <h2 class="section-title">{copy.interestsTitle}</h2>
+        </div>
+        <p>{copy.interestsBody}</p>
+      </div>
+      <ThingsILikeGraph ariaLabel={copy.interestsAria} locale={locale} rootLabel={copy.interestsTitle} />
+    </div>
+  </section>
 
   <section class="section-pad rule capability-matrix-section">
     <div class="page-shell profile-section">
@@ -79,40 +99,12 @@ const copy = locale === 'es' ? {
     </div>
   </section>
 
-  <section class="section-pad rule">
-    <div class="page-shell story-grid">
-      <div class="portrait-placeholder blueprint-card" aria-hidden="true">
-        <span>PORTRAIT / PLACEHOLDER</span>
-        <strong>NA</strong>
-        <small>40.4168° N / 3.7038° W</small>
-      </div>
-      <div class="story-copy">
-        <p class="eyebrow">BIO / A—01</p>
-        <h2 class="section-title">{copy.storyTitle}</h2>
-        {copy.story.map((paragraph) => <p>{paragraph}</p>)}
-      </div>
-    </div>
-  </section>
-
-  <section class="section-pad method-section">
-    <div class="page-shell">
-      <p class="eyebrow">{copy.methodLabel}</p>
-      <h2 class="section-title">{copy.methodTitle}</h2>
-      <div class="method-grid">
-        {copy.methods.map((method) => <article><span>{method.n}</span><h3>{method.title}</h3><p>{method.body}</p></article>)}
-      </div>
-    </div>
-  </section>
-
   <section class="about-cta-section rule">
     <div class="page-shell about-cta"><a class="button-primary" href={localePath(locale, '/projects')}>{copy.cta}<span aria-hidden="true">↗</span></a></div>
   </section>
 </BaseLayout>
 
 <style>
-  .about-hero { padding-block: clamp(4.5rem, 8vw, 7.5rem); }
-  .about-hero h1 { max-width: 12ch; margin-top: 2rem; }
-  .about-hero .lede { margin: 2rem 0 0 auto; }
   .profile-section > .eyebrow { width: min(100%, 64rem); margin: 0 auto 1.5rem; }
   .profile-matrix-title { margin: 0 auto 2.5rem; color: var(--color-forest); font-family: var(--font-serif); font-size: clamp(1.55rem, 3.3vw, 2.5rem); font-weight: 480; letter-spacing: -0.04em; line-height: 1; text-align: center; white-space: nowrap; }
   .profile-capabilities { width: min(100%, 64rem); margin-inline: auto; border-top: 1px solid var(--color-forest); }
@@ -133,25 +125,19 @@ const copy = locale === 'es' ? {
   .portrait-placeholder strong { font-family: var(--font-serif); font-size: clamp(5rem, 12vw, 10rem); font-weight: 400; letter-spacing: -0.08em; }
   .story-copy h2 { margin: 1.5rem 0 2rem; }
   .story-copy > p:not(.eyebrow) { margin: 0 0 1.2rem; color: var(--color-muted); font-size: 1rem; line-height: 1.85; }
-  .method-section { background: color-mix(in srgb, var(--color-paper-deep) 52%, transparent); }
-  .method-section h2 { margin-top: 1.4rem; }
-  .method-grid { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 3rem; border-top: 1px solid var(--color-line); }
-  .method-grid article { min-height: 15rem; padding: 1.5rem 2rem 1.5rem 0; border-right: 1px solid var(--color-line); }
-  .method-grid article + article { padding-left: 2rem; }
-  .method-grid span { color: var(--color-signal); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; }
-  .method-grid h3 { margin: 3rem 0 0.8rem; font-family: var(--font-serif); font-size: 1.45rem; font-weight: 520; }
-  .method-grid p { margin: 0; color: var(--color-muted); font-size: 0.82rem; line-height: 1.7; }
+  .interests-section { background: color-mix(in srgb, var(--color-paper-deep) 34%, transparent); }
+  .interests-head { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(20rem, 1.2fr); align-items: end; gap: clamp(2rem, 7vw, 7rem); margin-bottom: 2rem; }
+  .interests-head .eyebrow { margin: 0 0 1.2rem; }
+  .interests-head .section-title { max-width: none; }
+  .interests-head > p { max-width: 42rem; margin: 0; color: var(--color-muted); font-size: 0.88rem; line-height: 1.75; }
   .about-cta-section { padding-block: 3rem; }
   .about-cta { text-align: right; }
   @media (max-width: 760px) {
     .story-grid { grid-template-columns: 1fr; }
     .portrait-placeholder { min-height: 24rem; }
-    .method-grid { grid-template-columns: 1fr; }
-    .method-grid article,
-    .method-grid article + article { min-height: auto; padding: 1.5rem 0 2.5rem; border-right: 0; border-bottom: 1px solid var(--color-line); }
-    .method-grid h3 { margin-top: 2rem; }
   }
   @media (max-width: 650px) {
+    .interests-head { grid-template-columns: 1fr; gap: 1.25rem; }
     .profile-capabilities article { grid-template-columns: 1fr auto; gap: 1rem; }
     .profile-capabilities dl { grid-column: 1 / -1; grid-row: 2; }
     .profile-capabilities > article > span { grid-column: 2; grid-row: 1; }

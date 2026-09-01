@@ -30,7 +30,6 @@
 }
 
 html {
-  scroll-behavior: smooth;
   scrollbar-color: var(--color-forest-light) var(--color-paper-deep);
   scrollbar-width: thin;
 }
