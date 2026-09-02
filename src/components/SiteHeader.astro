@@ -15,7 +15,6 @@ const links = [
   { href: localePath(locale, '/'), label: labels.nav.home, route: '/' },
   { href: localePath(locale, '/projects'), label: labels.nav.projects, route: '/projects' },
   { href: localePath(locale, '/about'), label: labels.nav.about, route: '/about' },
-  { href: localePath(locale, '/contact'), label: labels.nav.contact, route: '/contact' },
 ];
 const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : route.startsWith(itemRoute);
 ---

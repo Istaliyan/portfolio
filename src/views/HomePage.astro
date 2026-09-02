@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import HeroShader from '../components/HeroShader.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { localePath, site, type Locale } from '../lib/site';
+import { localePath, type Locale } from '../lib/site';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -16,7 +16,6 @@ const copy = locale === 'es' ? {
   heroB: 'Decisiones reales.',
   intro: 'Diseño sistemas que convierten imágenes, nubes de puntos y datos territoriales en productos fiables, medibles y fáciles de usar.',
   seeProjects: 'Explorar proyectos',
-  contact: 'Contactar',
   profileLabel: 'Perfil / 02',
   profileMatrixTitle: 'Stack tecnológico',
   capabilityColumns: ['Stack principal', 'Herramientas de apoyo'],
@@ -32,10 +31,6 @@ const copy = locale === 'es' ? {
   workLabel: 'Trabajo / 01',
   workTitle: 'Proyectos destacados',
   allProjects: 'Ver todos los proyectos',
-  ctaLabel: 'Siguiente coordenada / 03',
-  ctaTitle: '¿Hay un problema espacial por resolver?',
-  ctaBody: 'Hablemos de datos, modelos y del producto que tiene que existir alrededor de ellos.',
-  writeMe: 'Escríbeme',
 } : {
   description: 'Portfolio spanning geospatial engineering, machine learning, remote sensing, and 3D visualization.',
   status: 'Open to new challenges',
@@ -43,7 +38,6 @@ const copy = locale === 'es' ? {
   heroB: 'Real decisions.',
   intro: 'I design systems that turn imagery, point clouds, and territorial data into reliable, measurable, and usable products.',
   seeProjects: 'Explore projects',
-  contact: 'Get in touch',
   profileLabel: 'Profile / 02',
   profileMatrixTitle: 'Tech stack',
   capabilityColumns: ['Core stack', 'Supporting tools'],
@@ -59,10 +53,6 @@ const copy = locale === 'es' ? {
   workLabel: 'Work / 01',
   workTitle: 'Selected projects',
   allProjects: 'View all projects',
-  ctaLabel: 'Next coordinate / 03',
-  ctaTitle: 'A spatial problem worth solving?',
-  ctaBody: 'Let’s talk about data, models, and the product that needs to exist around them.',
-  writeMe: 'Write to me',
 };
 ---
 
@@ -76,7 +66,6 @@ const copy = locale === 'es' ? {
         <p class="lede">{copy.intro}</p>
         <div class="hero-actions">
           <a class="button-primary" href={localePath(locale, '/projects')}>{copy.seeProjects}<span aria-hidden="true">↗</span></a>
-          <a class="button-secondary" href={localePath(locale, '/contact')}>{copy.contact}</a>
         </div>
       </div>
       <div class="hero-instrument blueprint-card" aria-hidden="true">
@@ -120,15 +109,6 @@ const copy = locale === 'es' ? {
       </div>
     </div>
   </section>
-
-  <section class="section-pad rule">
-    <div class="page-shell contact-panel blueprint-card">
-      <p class="eyebrow">{copy.ctaLabel}</p>
-      <h2 class="section-title">{copy.ctaTitle}</h2>
-      <p class="lede">{copy.ctaBody}</p>
-      <a class="button-primary" href={`mailto:${site.email}`}>{copy.writeMe}<span aria-hidden="true">↗</span></a>
-    </div>
-  </section>
 </BaseLayout>
 
 <style>
@@ -166,9 +146,6 @@ const copy = locale === 'es' ? {
   .projects-more { display: flex; justify-content: center; margin-top: 2.2rem; }
   .text-link { display: flex; align-items: center; gap: 1rem; color: var(--color-forest); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
   .text-link:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
-  .contact-panel { padding: clamp(2rem, 6vw, 5rem); background: color-mix(in srgb, var(--color-paper-deep) 65%, transparent); }
-  .contact-panel .section-title { max-width: 18ch; margin-top: 1.5rem; }
-  .contact-panel .lede { margin: 1.5rem 0 2.5rem; }
   @keyframes pulse-point { 50% { transform: scale(1.2); box-shadow: 0 0 0 12px rgba(189, 107, 67, 0.05); } }
   @media (max-width: 900px) {
     .hero { min-height: auto; grid-template-columns: 1fr; }

@@ -4,7 +4,7 @@ import { Icon } from 'astro-icon/components';
 import portrait from '../assets/profile/about-portrait.jpg';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ThingsILikeGraph from '../components/ThingsILikeGraph.astro';
-import { localePath, site, type Locale } from '../lib/site';
+import { site, type Locale } from '../lib/site';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -33,7 +33,6 @@ const copy = locale === 'es' ? {
     ['Web / Visualización', 'TypeScript, Astro, WebGL', 'CesiumJS, OpenLayers', '3 proyectos'],
     ['Infraestructura', 'Docker, GitHub Actions', 'AWS, Linux', '5 proyectos'],
   ],
-  cta: 'Ver proyectos',
 } : {
   title: 'About',
   intro: 'I am a technical specialist focused on building systems where territory, data, and software need to understand each other.',
@@ -56,7 +55,6 @@ const copy = locale === 'es' ? {
     ['Web / Visualization', 'TypeScript, Astro, WebGL', 'CesiumJS, OpenLayers', '3 projects'],
     ['Infrastructure', 'Docker, GitHub Actions', 'AWS, Linux', '5 projects'],
   ],
-  cta: 'View projects',
 };
 ---
 
@@ -119,14 +117,10 @@ const copy = locale === 'es' ? {
       </div>
     </div>
   </section>
-
-  <section class="about-cta-section rule">
-    <div class="page-shell about-cta"><a class="button-primary" href={localePath(locale, '/projects')}>{copy.cta}<span aria-hidden="true">↗</span></a></div>
-  </section>
 </BaseLayout>
 
 <style>
-  .profile-section > .eyebrow { width: min(100%, 64rem); margin: 0 auto 1.5rem; }
+  .profile-section > .eyebrow { width: 100%; justify-content: center; margin: 0 0 1.5rem; }
   .profile-matrix-title { margin: 0 auto 2.5rem; color: var(--color-forest); font-family: var(--font-serif); font-size: clamp(1.55rem, 3.3vw, 2.5rem); font-weight: 480; letter-spacing: -0.04em; line-height: 1; text-align: center; white-space: nowrap; }
   .profile-capabilities { width: min(100%, 64rem); margin-inline: auto; border-top: 1px solid var(--color-forest); }
   .profile-capabilities article { display: grid; grid-template-columns: minmax(10rem, 0.7fr) minmax(0, 1.6fr) auto; align-items: center; gap: 1.5rem; padding-block: 0.9rem; border-bottom: 1px solid var(--color-line); }
@@ -139,7 +133,8 @@ const copy = locale === 'es' ? {
   .story-grid { display: grid; grid-template-columns: minmax(19rem, 0.8fr) 1.2fr; align-items: center; gap: clamp(3rem, 9vw, 9rem); }
   .portrait { height: 27rem; margin: 0; overflow: hidden; background: var(--color-forest); }
   .portrait :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-  .story-copy h2 { margin: 1.5rem 0 2rem; }
+  .story-copy > .eyebrow { justify-content: center; }
+  .story-copy h2 { max-width: none; margin: 1.5rem 0 2rem; text-align: center; white-space: nowrap; }
   .story-copy > p:not(.eyebrow) { margin: 0 0 1.2rem; color: var(--color-muted); font-size: 1rem; line-height: 1.85; }
   .story-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--color-line); }
   .story-contact > span { color: var(--color-muted); font-size: 0.72rem; font-weight: 700; }
@@ -148,23 +143,22 @@ const copy = locale === 'es' ? {
   .story-contact-links :global(svg) { flex: none; }
   .story-contact-links a:hover { border-color: var(--color-forest); background: var(--color-forest); color: var(--color-paper); }
   .interests-section { background: color-mix(in srgb, var(--color-paper-deep) 34%, transparent); }
-  .interests-head { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(20rem, 1.2fr); align-items: end; gap: clamp(2rem, 7vw, 7rem); margin-bottom: 2rem; }
-  .interests-head .eyebrow { margin: 0 0 1.2rem; }
-  .interests-head .section-title { max-width: none; }
-  .interests-head > p { max-width: 42rem; margin: 0; color: var(--color-muted); font-size: 0.88rem; line-height: 1.75; }
-  .about-cta-section { padding-block: 3rem; }
-  .about-cta { text-align: right; }
+  .interests-head { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+  .interests-head .eyebrow { justify-content: center; margin: 0 0 1.2rem; }
+  .interests-head .section-title { max-width: none; text-align: center; white-space: nowrap; }
+  .interests-head > p { max-width: 42rem; margin: 0 auto; color: var(--color-muted); font-size: 0.88rem; line-height: 1.75; text-align: center; }
   @media (max-width: 760px) {
     .story-grid { grid-template-columns: 1fr; }
     .portrait { height: 24rem; }
   }
   @media (max-width: 650px) {
-    .interests-head { grid-template-columns: 1fr; gap: 1.25rem; }
     .profile-capabilities article { grid-template-columns: 1fr auto; gap: 1rem; }
     .profile-capabilities dl { grid-column: 1 / -1; grid-row: 2; }
     .profile-capabilities > article > span { grid-column: 2; grid-row: 1; }
   }
   @media (max-width: 520px) {
+    .story-copy .section-title,
+    .interests-head .section-title { font-size: clamp(1.6rem, 7vw, 2rem); }
     .profile-capabilities dl { grid-template-columns: 1fr; gap: 1rem; }
   }
 </style>

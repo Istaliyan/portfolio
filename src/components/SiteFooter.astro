@@ -34,16 +34,17 @@ const year = new Date().getFullYear();
 
 <style>
   .site-footer { border-top: 1px solid var(--color-line); padding-block: 2.5rem; }
-  .footer-grid { display: grid; grid-template-columns: 1fr auto auto; align-items: end; gap: 2rem; }
+  .footer-grid { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 2rem; }
   p { margin: 0; color: var(--color-muted); font-size: 0.72rem; }
   .footer-title { margin-bottom: 0.4rem; color: var(--color-ink); font-weight: 700; }
-  .footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .footer-links { display: flex; grid-column: 3; flex-wrap: wrap; align-items: center; justify-content: flex-end; justify-self: end; gap: 0.5rem; }
   .footer-links a { display: inline-flex; min-height: 2.1rem; align-items: center; gap: 0.45rem; padding: 0.5rem 0.7rem; border: 1px solid var(--color-line); color: var(--color-forest); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.05em; line-height: 1; text-decoration: none; text-transform: uppercase; transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease; }
   .footer-links :global(.footer-icon) { flex: none; }
   .footer-links a:hover { border-color: var(--color-forest); background: var(--color-forest); color: var(--color-paper); }
-  .footer-meta { text-align: right; }
+  .footer-meta { grid-row: 1; grid-column: 2; text-align: center; }
   @media (max-width: 700px) {
     .footer-grid { grid-template-columns: 1fr; align-items: start; }
-    .footer-meta { text-align: left; }
+    .footer-links { grid-column: 1; justify-self: end; }
+    .footer-meta { grid-row: auto; grid-column: 1; justify-self: center; }
   }
 </style>

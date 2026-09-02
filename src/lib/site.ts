@@ -13,7 +13,7 @@ export const site = {
 
 export const ui = {
   es: {
-    nav: { home: 'Inicio', projects: 'Proyectos', about: 'Sobre mí', contact: 'Contacto' },
+    nav: { home: 'Inicio', projects: 'Proyectos', about: 'Sobre mí' },
     language: 'English',
     all: 'Todos',
     projects: 'Proyectos',
@@ -22,7 +22,7 @@ export const ui = {
     backToProjects: 'Volver a proyectos',
   },
   en: {
-    nav: { home: 'Home', projects: 'Projects', about: 'About', contact: 'Contact' },
+    nav: { home: 'Home', projects: 'Projects', about: 'About' },
     language: 'Español',
     all: 'All',
     projects: 'Projects',
