@@ -1,15 +1,23 @@
 ---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import portrait from '../assets/profile/about-portrait.jpg';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ThingsILikeGraph from '../components/ThingsILikeGraph.astro';
-import { localePath, type Locale } from '../lib/site';
+import { localePath, site, type Locale } from '../lib/site';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
+const portraitAlt = locale === 'es'
+  ? 'Retrato de Istaliyan Ivanov Manov al aire libre'
+  : 'Portrait of Istaliyan Ivanov Manov outdoors';
 const copy = locale === 'es' ? {
   title: 'Sobre mí',
   intro: 'Soy un perfil técnico especializado en construir sistemas donde el territorio, los datos y el software tienen que entenderse entre sí.',
   storyTitle: 'Más allá del modelo.',
   story: ['Mi trabajo empieza antes del entrenamiento: entender cómo se capturó el dato, qué representa realmente y dónde puede romperse el razonamiento espacial.', 'Después convierto ese conocimiento en pipelines reproducibles, modelos medibles y herramientas que hacen visible el resultado. El objetivo es que una solución no solo funcione una vez, sino que pueda explicarse, mantenerse y evolucionar.'],
+  contactLabel: 'Contáctame en:',
+  emailLabel: 'Correo',
   interestsLabel: 'Intereses / 02',
   interestsTitle: 'Cosas que me gustan',
   interestsBody: 'Una cartografía personal de ideas, disciplinas y tradiciones que exploro. Arrastra, amplía o selecciona un nodo para recorrer sus conexiones.',
@@ -31,6 +39,8 @@ const copy = locale === 'es' ? {
   intro: 'I am a technical specialist focused on building systems where territory, data, and software need to understand each other.',
   storyTitle: 'Beyond the model.',
   story: ['My work starts before training: understanding how data was captured, what it truly represents, and where spatial reasoning can break.', 'I then turn that knowledge into reproducible pipelines, measurable models, and tools that make outcomes visible. The goal is not only to make a solution work once, but to make it explainable, maintainable, and able to evolve.'],
+  contactLabel: 'Contact me on:',
+  emailLabel: 'Email',
   interestsLabel: 'Interests / 02',
   interestsTitle: 'Things I like',
   interestsBody: 'A personal map of ideas, disciplines, and traditions I explore. Drag, zoom, or select a node to trace its connections.',
@@ -53,16 +63,27 @@ const copy = locale === 'es' ? {
 <BaseLayout locale={locale} title={copy.title} description={copy.intro}>
   <section class="section-pad">
     <div class="page-shell story-grid">
-      <div class="portrait-placeholder blueprint-card" aria-hidden="true">
-        <span>PORTRAIT / PLACEHOLDER</span>
-        <strong>IIM</strong>
-        <small>41.6523° N / 4.7245° W</small>
-      </div>
+      <figure class="portrait blueprint-card">
+        <Image src={portrait} alt={portraitAlt} layout="full-width" />
+      </figure>
       <div class="story-copy">
         <p class="eyebrow">BIO / A—01</p>
         <h2 class="section-title">{copy.storyTitle}</h2>
         <p>{copy.intro}</p>
         {copy.story.map((paragraph) => <p>{paragraph}</p>)}
+        <div class="story-contact">
+          <span>{copy.contactLabel}</span>
+          <div class="story-contact-links">
+            <a href={site.linkedin}>
+              <Icon name="brands/linkedin" size="0.95rem" aria-hidden="true" focusable="false" />
+              <span>LinkedIn</span>
+            </a>
+            <a href={`mailto:${site.email}`}>
+              <Icon name="envelope" size="0.95rem" aria-hidden="true" focusable="false" />
+              <span>{copy.emailLabel}</span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -116,15 +137,16 @@ const copy = locale === 'es' ? {
   .profile-capabilities dd { margin: 0; color: var(--color-muted); font-size: 0.76rem; line-height: 1.5; }
   .profile-capabilities > article > span { color: var(--color-signal); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; }
   .story-grid { display: grid; grid-template-columns: minmax(19rem, 0.8fr) 1.2fr; align-items: center; gap: clamp(3rem, 9vw, 9rem); }
-  .portrait-placeholder { display: grid; min-height: 27rem; place-items: center; background: var(--color-forest); color: var(--color-paper); }
-  .portrait-placeholder::after { border-color: rgba(244, 240, 231, 0.7); }
-  .portrait-placeholder span,
-  .portrait-placeholder small { position: absolute; color: rgba(244, 240, 231, 0.6); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; }
-  .portrait-placeholder span { top: 1.3rem; left: 1.3rem; }
-  .portrait-placeholder small { right: 1.3rem; bottom: 1.3rem; }
-  .portrait-placeholder strong { font-family: var(--font-serif); font-size: clamp(5rem, 12vw, 10rem); font-weight: 400; letter-spacing: -0.08em; }
+  .portrait { height: 27rem; margin: 0; overflow: hidden; background: var(--color-forest); }
+  .portrait :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
   .story-copy h2 { margin: 1.5rem 0 2rem; }
   .story-copy > p:not(.eyebrow) { margin: 0 0 1.2rem; color: var(--color-muted); font-size: 1rem; line-height: 1.85; }
+  .story-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--color-line); }
+  .story-contact > span { color: var(--color-muted); font-size: 0.72rem; font-weight: 700; }
+  .story-contact-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+  .story-contact-links a { display: inline-flex; min-height: 2.1rem; align-items: center; gap: 0.45rem; padding: 0.5rem 0.7rem; border: 1px solid var(--color-line); color: var(--color-forest); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.05em; line-height: 1; text-decoration: none; text-transform: uppercase; transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease; }
+  .story-contact-links :global(svg) { flex: none; }
+  .story-contact-links a:hover { border-color: var(--color-forest); background: var(--color-forest); color: var(--color-paper); }
   .interests-section { background: color-mix(in srgb, var(--color-paper-deep) 34%, transparent); }
   .interests-head { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(20rem, 1.2fr); align-items: end; gap: clamp(2rem, 7vw, 7rem); margin-bottom: 2rem; }
   .interests-head .eyebrow { margin: 0 0 1.2rem; }
@@ -134,7 +156,7 @@ const copy = locale === 'es' ? {
   .about-cta { text-align: right; }
   @media (max-width: 760px) {
     .story-grid { grid-template-columns: 1fr; }
-    .portrait-placeholder { min-height: 24rem; }
+    .portrait { height: 24rem; }
   }
   @media (max-width: 650px) {
     .interests-head { grid-template-columns: 1fr; gap: 1.25rem; }
