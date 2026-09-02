@@ -1,5 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
+import brandIconUrl from '../icons/brand-icon.png?url';
 import { alternateLocalePath, localePath, site, stripBase, ui, type Locale } from '../lib/site';
 
 interface Props {
@@ -22,7 +23,9 @@ const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : rout
 <header class="site-header">
   <div class="page-shell header-inner">
     <a class="brand" href={localePath(locale, '/')} aria-label={`${site.name} — ${labels.nav.home}`}>
-      <span class="brand-mark" aria-hidden="true">N°</span>
+      <span class="brand-mark" aria-hidden="true">
+        <img src={brandIconUrl} alt="" width="512" height="512" />
+      </span>
       <span>
         <strong>{site.name}</strong>
         <small>{site.role[locale]}</small>
@@ -81,13 +84,15 @@ const isActive = (itemRoute: string) => itemRoute === '/' ? route === '/' : rout
 
   .brand-mark {
     display: grid;
-    width: 2.15rem;
-    height: 2.15rem;
+    width: 2.75rem;
+    height: 2.35rem;
     place-items: center;
-    border: 1px solid var(--color-forest);
-    color: var(--color-forest);
-    font-family: var(--font-serif);
-    font-size: 0.82rem;
+  }
+
+  .brand-mark img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .brand strong,

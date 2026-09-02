@@ -30,6 +30,7 @@
 }
 
 html {
+  scrollbar-gutter: stable;
   scrollbar-color: var(--color-forest-light) var(--color-paper-deep);
   scrollbar-width: thin;
 }

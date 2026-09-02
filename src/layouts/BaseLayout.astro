@@ -2,6 +2,7 @@
 import BackgroundField from '../components/BackgroundField.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import brandIconUrl from '../icons/brand-icon-v3.png?url';
 import '../styles/global.css';
 import { alternateLocalePath, site, type Locale } from '../lib/site';
 
@@ -25,6 +26,7 @@ const alternate = new URL(alternateLocalePath(locale, Astro.url.pathname), Astro
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#f4f0e7" />
     <meta name="description" content={description} />
+    <link rel="icon" type="image/png" href={brandIconUrl} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
