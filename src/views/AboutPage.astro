@@ -130,13 +130,14 @@ const copy = locale === 'es' ? {
   .profile-capabilities dt { margin-bottom: 0.25rem; color: var(--color-forest-light); font-size: 0.56rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
   .profile-capabilities dd { margin: 0; color: var(--color-muted); font-size: 0.76rem; line-height: 1.5; }
   .profile-capabilities > article > span { color: var(--color-signal); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; }
-  .story-grid { display: grid; grid-template-columns: minmax(19rem, 0.8fr) 1.2fr; align-items: center; gap: clamp(3rem, 9vw, 9rem); }
-  .portrait { height: 27rem; margin: 0; overflow: hidden; background: var(--color-forest); }
+  .story-grid { display: grid; grid-template-columns: minmax(19rem, 0.8fr) 1.2fr; align-items: stretch; gap: clamp(3rem, 9vw, 9rem); }
+  .portrait { min-height: 27rem; margin: 0; overflow: hidden; background: var(--color-forest); }
   .portrait :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  .story-copy { display: flex; flex-direction: column; }
   .story-copy > .eyebrow { justify-content: center; }
   .story-copy h2 { max-width: none; margin: 1.5rem 0 2rem; text-align: center; white-space: nowrap; }
   .story-copy > p:not(.eyebrow) { margin: 0 0 1.2rem; color: var(--color-muted); font-size: 1rem; line-height: 1.85; }
-  .story-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--color-line); }
+  .story-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: auto; padding-top: 1.25rem; border-top: 1px solid var(--color-line); }
   .story-contact > span { color: var(--color-muted); font-size: 0.72rem; font-weight: 700; }
   .story-contact-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
   .story-contact-links a { display: inline-flex; min-height: 2.1rem; align-items: center; gap: 0.45rem; padding: 0.5rem 0.7rem; border: 1px solid var(--color-line); color: var(--color-forest); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.05em; line-height: 1; text-decoration: none; text-transform: uppercase; transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease; }
@@ -149,7 +150,8 @@ const copy = locale === 'es' ? {
   .interests-head > p { max-width: 42rem; margin: 0 auto; color: var(--color-muted); font-size: 0.88rem; line-height: 1.75; text-align: center; }
   @media (max-width: 760px) {
     .story-grid { grid-template-columns: 1fr; }
-    .portrait { height: 24rem; }
+    .portrait { height: 24rem; min-height: 0; }
+    .story-contact { margin-top: 1.5rem; }
   }
   @media (max-width: 650px) {
     .profile-capabilities article { grid-template-columns: 1fr auto; gap: 1rem; }
