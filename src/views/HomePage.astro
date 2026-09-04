@@ -86,7 +86,7 @@ const copy = locale === 'es' ? {
     </div>
   </section>
 
-  <section class="section-pad rule">
+  <section class="section-pad rule work-section">
     <div class="page-shell">
       <div class="projects-head">
         <p class="eyebrow">{copy.workLabel}</p>
@@ -153,6 +153,29 @@ const copy = locale === 'es' ? {
   .instrument-coords { position: absolute; z-index: 2; top: 46%; right: 0; left: 0; color: var(--color-forest); font-family: var(--font-serif); font-size: clamp(1.2rem, 2.2vw, 2rem); line-height: 1.15; text-align: center; }
   .instrument-scale { position: absolute; z-index: 2; right: 1rem; bottom: 1rem; left: 1rem; display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 3px double var(--color-forest); color: var(--color-muted); font-size: 0.55rem; font-weight: 700; }
   .hero-foot { position: absolute; z-index: 2; right: 0; bottom: 1rem; left: 0; display: flex; justify-content: space-between; color: var(--color-muted); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; }
+  .work-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(
+      to bottom,
+      var(--color-forest) 0%,
+      rgba(21, 61, 48, 0.88) 18%,
+      rgba(21, 61, 48, 0.34) 46%,
+      transparent 74%
+    );
+  }
+  .work-section::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(244, 240, 231, 0.34) 0 0.7px, transparent 0.9px);
+    background-size: 5px 5px;
+    content: "";
+    mask-image: linear-gradient(to bottom, black, transparent 58%);
+    opacity: 0.22;
+    pointer-events: none;
+  }
   .profile-section > .eyebrow { width: min(100%, 64rem); justify-content: center; margin: 0 auto 1.5rem; }
   .profile-matrix-title { margin: 0 auto 2.5rem; color: var(--color-forest); font-family: var(--font-serif); font-size: clamp(1.55rem, 3.3vw, 2.5rem); font-weight: 480; letter-spacing: -0.04em; line-height: 1; text-align: center; white-space: nowrap; }
   .profile-capabilities { width: min(100%, 64rem); margin-inline: auto; border-top: 1px solid var(--color-forest); }
@@ -164,8 +187,9 @@ const copy = locale === 'es' ? {
   .profile-capabilities dd { margin: 0; color: var(--color-muted); font-size: 0.76rem; line-height: 1.5; }
   .profile-capabilities > article > span { color: var(--color-signal); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; }
   .projects-head { margin-bottom: 2.8rem; text-align: center; }
-  .projects-head .eyebrow { justify-content: center; margin: 0 0 1rem; }
-  .projects-head .section-title { max-width: none; margin-inline: auto; font-size: clamp(1.7rem, 4vw, 3.3rem); white-space: nowrap; }
+  .projects-head .eyebrow { justify-content: center; margin: 0 0 1rem; color: color-mix(in srgb, var(--color-paper) 72%, transparent); }
+  .projects-head .eyebrow::before { background: var(--color-signal); }
+  .projects-head .section-title { max-width: none; margin-inline: auto; color: var(--color-paper); font-size: clamp(1.7rem, 4vw, 3.3rem); white-space: nowrap; }
   .projects-more { display: flex; justify-content: center; margin-top: 2.2rem; }
   .text-link { display: flex; align-items: center; gap: 1rem; color: var(--color-forest); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
   .text-link:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
