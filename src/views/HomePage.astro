@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import HeroShader from '../components/HeroShader.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { localePath, type Locale } from '../lib/site';
+import { localePath, site, type Locale } from '../lib/site';
 
 interface Props { locale: Locale }
 const { locale } = Astro.props;
@@ -31,6 +31,10 @@ const copy = locale === 'es' ? {
   workLabel: 'Trabajo / 01',
   workTitle: 'Proyectos destacados',
   allProjects: 'Ver todos los proyectos',
+  collaborationLabel: 'Colaboración / 03',
+  collaborationTitle: '¿Trabajamos juntos?',
+  collaborationBody: 'Colaboro en proyectos de ingeniería geoespacial, machine learning, teledetección y visualización.',
+  collaborationEmail: 'Escríbeme',
 } : {
   description: 'Portfolio spanning geospatial engineering, machine learning, remote sensing, and 3D visualization.',
   status: 'Open to new challenges',
@@ -53,6 +57,10 @@ const copy = locale === 'es' ? {
   workLabel: 'Work / 01',
   workTitle: 'Selected projects',
   allProjects: 'View all projects',
+  collaborationLabel: 'Collaboration / 03',
+  collaborationTitle: 'Let’s work together.',
+  collaborationBody: 'I collaborate on projects in geospatial engineering, machine learning, remote sensing, and visualization.',
+  collaborationEmail: 'Email me',
 };
 ---
 
@@ -109,6 +117,21 @@ const copy = locale === 'es' ? {
       </div>
     </div>
   </section>
+
+  <section class="section-pad collaboration-section">
+    <div class="page-shell collaboration-grid">
+      <div class="collaboration-copy">
+        <p class="eyebrow">{copy.collaborationLabel}</p>
+        <h2 class="section-title">{copy.collaborationTitle}</h2>
+        <p>{copy.collaborationBody}</p>
+      </div>
+      <a class="collaboration-email" href={`mailto:${site.email}`}>
+        <span>{copy.collaborationEmail}</span>
+        <strong>{site.email}</strong>
+        <span class="collaboration-arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -146,12 +169,25 @@ const copy = locale === 'es' ? {
   .projects-more { display: flex; justify-content: center; margin-top: 2.2rem; }
   .text-link { display: flex; align-items: center; gap: 1rem; color: var(--color-forest); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.07em; text-decoration: none; text-transform: uppercase; }
   .text-link:hover { text-decoration: underline; text-underline-offset: 0.3rem; }
+  .collaboration-section { padding-block: clamp(2.5rem, 4vw, 3.5rem); background-color: var(--color-forest); background-image: linear-gradient(90deg, color-mix(in srgb, var(--color-paper) 3%, transparent) 1px, transparent 1px); background-size: 6rem 100%; color: var(--color-paper); }
+  .collaboration-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(19rem, 22rem); align-items: center; gap: clamp(2.5rem, 7vw, 7rem); }
+  .collaboration-copy .eyebrow { margin: 0 0 0.85rem; color: color-mix(in srgb, var(--color-paper) 68%, transparent); font-size: 0.6rem; }
+  .collaboration-copy .section-title { max-width: none; color: var(--color-paper); font-size: clamp(1.65rem, 2.8vw, 2.45rem); }
+  .collaboration-copy > p:last-child { max-width: 39rem; margin: 0.8rem 0 0; color: color-mix(in srgb, var(--color-paper) 70%, transparent); font-size: 0.82rem; line-height: 1.65; }
+  .collaboration-email { position: relative; display: grid; gap: 0.45rem; padding: 1rem 3rem 1rem 1rem; border: 1px solid color-mix(in srgb, var(--color-paper) 28%, transparent); color: var(--color-paper); text-decoration: none; transition: border-color 180ms ease, background-color 180ms ease, transform 180ms ease; }
+  .collaboration-email::before { position: absolute; top: -1px; left: 1rem; width: 2.2rem; height: 1px; background: var(--color-signal); content: ""; }
+  .collaboration-email > span:first-child { color: color-mix(in srgb, var(--color-paper) 62%, transparent); font-size: 0.55rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; }
+  .collaboration-email strong { overflow-wrap: anywhere; font-family: var(--font-serif); font-size: clamp(1rem, 1.7vw, 1.3rem); font-weight: 480; letter-spacing: -0.02em; }
+  .collaboration-arrow { position: absolute; top: 50%; right: 1rem; color: var(--color-signal); font-size: 1rem; transform: translateY(-50%); }
+  .collaboration-email:hover { border-color: var(--color-paper); background: color-mix(in srgb, var(--color-paper) 8%, transparent); transform: translateY(-2px); }
   @keyframes pulse-point { 50% { transform: scale(1.2); box-shadow: 0 0 0 12px rgba(189, 107, 67, 0.05); } }
   @media (max-width: 900px) {
     .hero { min-height: auto; grid-template-columns: 1fr; }
     .hero-instrument { width: min(100%, 24rem); aspect-ratio: 1.2; }
   }
   @media (max-width: 650px) {
+    .collaboration-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .collaboration-email { width: 100%; }
     .profile-capabilities article { grid-template-columns: 1fr auto; gap: 1rem; }
     .profile-capabilities dl { grid-column: 1 / -1; grid-row: 2; }
     .profile-capabilities > article > span { grid-column: 2; grid-row: 1; }
